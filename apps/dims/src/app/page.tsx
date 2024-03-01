@@ -2,22 +2,16 @@
 import { useState } from "react";
 
 interface ActiveFreight {
-    name?: string,
-    quantity?: number,
-    length?: number,
-    width?: number,
-    height?: number,
+    name: string,
+    quantity: number,
+    length: number,
+    width: number,
+    height: number,
 }
 
 export default function Home() {
     const [addFreightMenuOpen, setAddFreightMenuOpen] = useState(false)
     const [savedFreight, setSavedFreight]: any[] = useState([])
-
-    const [activeFreightName, setactiveFreightName] = useState('')
-    const [activeFreightQuantity, setactiveFreightQuantity] = useState('')
-    const [activeFreightWidth, setactiveFreightWidth] = useState('')
-    const [activeFreightLength, setactiveFreightLength] = useState('')
-    const [activeFreightHeight, setactiveFreightHeight] = useState('')
 
     const [activeFreight, setActiveFreight] = useState<ActiveFreight>({
         name: '',
@@ -28,7 +22,7 @@ export default function Home() {
     })
 
     function saveFreight() {
-        setSavedFreight([...savedFreight, `${activeFreightName}: ${activeFreightQuantity}x, ${activeFreightLength} in, ${activeFreightWidth} in, ${activeFreightHeight} in`, JSON.stringify(activeFreight)])
+        setSavedFreight([...savedFreight, JSON.stringify(activeFreight)])
         setActiveFreight({
             name: '',
             quantity: 0,
@@ -36,11 +30,6 @@ export default function Home() {
             width: 0,
             height: 0,
         })
-        setactiveFreightName('')
-        setactiveFreightQuantity('')
-        setactiveFreightWidth('')
-        setactiveFreightLength('')
-        setactiveFreightHeight('')
     }
 
     async function onCalculate(event: string) {
@@ -106,33 +95,34 @@ export default function Home() {
                         <input type="text" name="name" style={formStyle}
                             value={activeFreight.name}
                             onChange={event => setActiveFreight({ ...activeFreight, name: event.target.value })}
-                        // value={activeFreightName}
-                        // onChange={event => setactiveFreightName(event.target.value)}
                         />
                         <br />
                         {"Quantity:   "}
                         <input type="number" name="quantity" style={formStyle}
-                            value={activeFreightQuantity}
-                            onChange={event => setactiveFreightQuantity(event.target.value)}
+                            value={activeFreight.quantity || ''}
+                            onChange={event => setActiveFreight({ ...activeFreight, quantity: Number(event.target.value) })}
                         />
                         <br />
                         {"Length (in):   "}
                         <input type="number" name="length" style={formStyle}
-                            value={activeFreightLength}
-                            onChange={event => setactiveFreightLength(event.target.value)} />
+                            value={activeFreight.length || ''}
+                            onChange={event => setActiveFreight({ ...activeFreight, length: Number(event.target.value) })}
+                        />
                         <br />
                         {"Width (in):   "}
                         <input type="number" name="height" style={formStyle}
-                            value={activeFreightHeight}
-                            onChange={event => setactiveFreightHeight(event.target.value)}
+                            value={activeFreight.height || ''}
+                            onChange={event => setActiveFreight({ ...activeFreight, height: Number(event.target.value) })}
                         />
                         <br />
                         {"Height (in):   "}
                         <input type="quantity" name="width" style={formStyle}
-                            value={activeFreightWidth}
-                            onChange={event => setactiveFreightWidth(event.target.value)} />
+                            value={activeFreight.width || ''}
+                            onChange={event => setActiveFreight({ ...activeFreight, width: Number(event.target.value) })}
+                        />
                         <br />
-                        <button onClick={saveFreight}
+                        <button
+                            onClick={activeFreight.name ? saveFreight : () => window.alert('At least add a name')}
                             className="justify-center border-b border-gray-300 bg-gradient-to-b"> Save Freight
                         </button>
                         <br />
