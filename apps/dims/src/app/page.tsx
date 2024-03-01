@@ -10,9 +10,21 @@ interface ActiveFreight {
     weight: number,
 }
 
+interface ResponseBody {
+    loadInput: any,
+    calculation: {
+        requiredForWeight: number,
+        requiredForVolume: number,
+        determingFactor: string
+    }
+}
+
 export default function Home() {
     const [addFreightMenuOpen, setAddFreightMenuOpen] = useState(false)
     const [savedFreight, setSavedFreight] = useState<ActiveFreight[]>([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [responseAttempted, setResponseAttempted] = useState(false)
+    const [calculatedResponse, setCalculatedResponse]: any = useState({})
 
     const [activeFreight, setActiveFreight] = useState<ActiveFreight>({
         name: '',
@@ -37,14 +49,17 @@ export default function Home() {
     }
 
     async function onCalculate(savedItems: ActiveFreight[]) {
+        // setIsLoading(true)
         const response = await fetch('/api', {
             method: 'POST',
             body: JSON.stringify(savedItems),
         })
 
-        const data = await response.json()
+        const data = await response.json() as ResponseBody
 
-        window.alert(JSON.stringify(data))
+
+        setCalculatedResponse(data as ResponseBody)
+        setResponseAttempted(true)
     }
 
     const formStyle = {
@@ -68,6 +83,27 @@ export default function Home() {
                 >
                     {!addFreightMenuOpen ? "Add Freight +" : "Close Menu X"}
                 </button>
+                {
+                    responseAttempted && calculatedResponse && (
+                        <div className="justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+                            <h1>
+                                Load Requirements:
+                            </h1>
+                            <br />
+                            <h2>
+                                {`${JSON.stringify(calculatedResponse.loadInput)}`}
+                            </h2>
+                            <br />
+                            <h1>
+                                Your Result:
+                            </h1>
+                            <br />
+                            <h2>
+                                {`${JSON.stringify(calculatedResponse.calculation.requiredForWeight)} 48' flatbed(s)`}
+                            </h2>
+                        </div>
+                    )
+                }
                 {
                     savedFreight.length ? (
                         <button
@@ -157,6 +193,5 @@ export default function Home() {
                     </div>
                 )
             }
-        </main >
-    );
+        </main >)
 }
