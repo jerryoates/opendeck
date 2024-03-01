@@ -1,8 +1,15 @@
 "use client"
 import { useState } from "react";
 
-export default function Home() {
+interface ActiveFreight {
+    name?: string,
+    quantity?: number,
+    length?: number,
+    width?: number,
+    height?: number,
+}
 
+export default function Home() {
     const [addFreightMenuOpen, setAddFreightMenuOpen] = useState(false)
     const [savedFreight, setSavedFreight]: any[] = useState([])
 
@@ -12,7 +19,31 @@ export default function Home() {
     const [activeFreightLength, setactiveFreightLength] = useState('')
     const [activeFreightHeight, setactiveFreightHeight] = useState('')
 
-    async function onFreightSubmit(event: string) {
+    const [activeFreight, setActiveFreight] = useState<ActiveFreight>({
+        name: '',
+        quantity: 0,
+        length: 0,
+        width: 0,
+        height: 0,
+    })
+
+    function saveFreight() {
+        setSavedFreight([...savedFreight, `${activeFreightName}: ${activeFreightQuantity}x, ${activeFreightLength} in, ${activeFreightWidth} in, ${activeFreightHeight} in`, JSON.stringify(activeFreight)])
+        setActiveFreight({
+            name: '',
+            quantity: 0,
+            length: 0,
+            width: 0,
+            height: 0,
+        })
+        setactiveFreightName('')
+        setactiveFreightQuantity('')
+        setactiveFreightWidth('')
+        setactiveFreightLength('')
+        setactiveFreightHeight('')
+    }
+
+    async function onCalculate(event: string) {
         // event.preventDefault()
 
         // const formData = new FormData(event.currentTarget)
@@ -52,7 +83,7 @@ export default function Home() {
                             className="fixed right-0 top-0 flex w-full border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
                             type="submit"
                             style={{ ...formStyle, marginLeft: 1000 }}
-                            onClick={() => onFreightSubmit("test form:")}
+                            onClick={() => onCalculate("test form:")}
                         >
                             Calculate
                         </button>
@@ -73,8 +104,10 @@ export default function Home() {
                     <div className="text-lg">
                         {"Name:   "}
                         <input type="text" name="name" style={formStyle}
-                            value={activeFreightName}
-                            onChange={event => setactiveFreightName(event.target.value)}
+                            value={activeFreight.name}
+                            onChange={event => setActiveFreight({ ...activeFreight, name: event.target.value })}
+                        // value={activeFreightName}
+                        // onChange={event => setactiveFreightName(event.target.value)}
                         />
                         <br />
                         {"Quantity:   "}
@@ -99,9 +132,7 @@ export default function Home() {
                             value={activeFreightWidth}
                             onChange={event => setactiveFreightWidth(event.target.value)} />
                         <br />
-                        <button onClick={() =>
-                            setSavedFreight([...savedFreight, `${activeFreightName}: ${activeFreightQuantity}x, ${activeFreightLength} in, ${activeFreightWidth} in, ${activeFreightHeight} in`])
-                        }
+                        <button onClick={saveFreight}
                             className="justify-center border-b border-gray-300 bg-gradient-to-b"> Save Freight
                         </button>
                         <br />
