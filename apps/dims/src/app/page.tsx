@@ -7,6 +7,7 @@ interface ActiveFreight {
     length: number,
     width: number,
     height: number,
+    weight: number,
 }
 
 export default function Home() {
@@ -19,16 +20,19 @@ export default function Home() {
         length: 0,
         width: 0,
         height: 0,
+        weight: 0
     })
 
     function saveFreight() {
         setSavedFreight([...savedFreight, activeFreight])
+        setAddFreightMenuOpen(false)
         setActiveFreight({
             name: '',
             quantity: 0,
             length: 0,
             width: 0,
             height: 0,
+            weight: 0
         })
     }
 
@@ -82,7 +86,7 @@ export default function Home() {
                     savedFreight.length ? savedFreight.map((freight: ActiveFreight, index: number) => {
                         return (
                             <li key={index} style={formStyle}>
-                                {`Item ${index + 1}: ${freight.name} x ${freight.quantity}`}
+                                {`${freight.quantity} ${freight.name}`}
                                 <button style={deleteButtonStyle}
                                     onClick={() => {
                                         const previousFreight = [...savedFreight]
@@ -96,6 +100,8 @@ export default function Home() {
                                 {`width: ${freight.width} in`}
                                 <br />
                                 {`height: ${freight.height} in`}
+                                <br />
+                                {`weight: ${freight.weight} lbs`}
                                 <br />
                             </li>
                         )
@@ -125,15 +131,21 @@ export default function Home() {
                             />
                             <br />
                             {"Width (in):   "}
-                            <input type="number" name="height" style={formStyle}
+                            <input type="number" name="width" style={formStyle}
                                 value={activeFreight.height || ''}
                                 onChange={event => setActiveFreight({ ...activeFreight, height: Number(event.target.value) })}
                             />
                             <br />
                             {"Height (in):   "}
-                            <input type="quantity" name="width" style={formStyle}
+                            <input type="number" name="height" style={formStyle}
                                 value={activeFreight.width || ''}
                                 onChange={event => setActiveFreight({ ...activeFreight, width: Number(event.target.value) })}
+                            />
+                            <br />
+                            {"Weight (lbs):   "}
+                            <input type="number" name="weight" style={formStyle}
+                                value={activeFreight.weight || ''}
+                                onChange={event => setActiveFreight({ ...activeFreight, weight: Number(event.target.value) })}
                             />
                             <br />
                             <button
