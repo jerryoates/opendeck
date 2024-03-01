@@ -4,8 +4,13 @@ import { useState } from "react";
 export default function Home() {
 
     const [addFreightMenuOpen, setAddFreightMenuOpen] = useState(false)
+    const [savedFreight, setSavedFreight]: any[] = useState([])
 
-    const [currentFreight, setCurrentFreight]: any[] = useState([])
+    const [activeFreightName, setactiveFreightName] = useState('')
+    const [activeFreightQuantity, setactiveFreightQuantity] = useState('')
+    const [activeFreightWidth, setactiveFreightWidth] = useState('')
+    const [activeFreightLength, setactiveFreightLength] = useState('')
+    const [activeFreightHeight, setactiveFreightHeight] = useState('')
 
     async function onFreightSubmit(event: string) {
         // event.preventDefault()
@@ -41,12 +46,24 @@ export default function Home() {
                 >
                     {!addFreightMenuOpen ? "Add Freight +" : "Close Menu X"}
                 </button>
+                {
+                    savedFreight.length ? (
+                        <button
+                            className="fixed right-0 top-0 flex w-full border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
+                            type="submit"
+                            style={{ ...formStyle, marginLeft: 1000 }}
+                            onClick={() => onFreightSubmit("test form:")}
+                        >
+                            Calculate
+                        </button>
+                    ) : null
+                }
             </div>
             <div>
                 {
-                    currentFreight.length ? currentFreight.map((freight: any) => {
+                    savedFreight.length ? savedFreight.map((freight: string, index: number) => {
                         return (
-                            <div> {freight} </div>
+                            <li key={index} style={formStyle}> {freight} </li>
                         )
                     }) : null
                 }
@@ -55,31 +72,39 @@ export default function Home() {
                 <div>
                     <div className="text-lg">
                         {"Name:   "}
-                        <input type="text" name="name" style={formStyle} />
+                        <input type="text" name="name" style={formStyle}
+                            value={activeFreightName}
+                            onChange={event => setactiveFreightName(event.target.value)}
+                        />
                         <br />
                         {"Quantity:   "}
-                        <input type="number" name="name" style={formStyle} />
+                        <input type="number" name="quantity" style={formStyle}
+                            value={activeFreightQuantity}
+                            onChange={event => setactiveFreightQuantity(event.target.value)}
+                        />
                         <br />
                         {"Length (in):   "}
-                        <input type="number" name="length" style={formStyle} />
+                        <input type="number" name="length" style={formStyle}
+                            value={activeFreightLength}
+                            onChange={event => setactiveFreightLength(event.target.value)} />
                         <br />
                         {"Width (in):   "}
-                        <input type="number" name="height" style={formStyle} />
+                        <input type="number" name="height" style={formStyle}
+                            value={activeFreightHeight}
+                            onChange={event => setactiveFreightHeight(event.target.value)}
+                        />
                         <br />
                         {"Height (in):   "}
-                        <input type="quantity" name="width" style={formStyle} />
+                        <input type="quantity" name="width" style={formStyle}
+                            value={activeFreightWidth}
+                            onChange={event => setactiveFreightWidth(event.target.value)} />
                         <br />
                         <button onClick={() =>
-                            setCurrentFreight([...currentFreight, 'new item'])
+                            setSavedFreight([...savedFreight, `${activeFreightName}: ${activeFreightQuantity}x, ${activeFreightLength} in, ${activeFreightWidth} in, ${activeFreightHeight} in`])
                         }
                             className="justify-center border-b border-gray-300 bg-gradient-to-b"> Save Freight
                         </button>
                         <br />
-                        {
-                            currentFreight.length ? (
-                                <button type="submit" onClick={() => onFreightSubmit("test form:")} className="justify-center border-b border-gray-300 bg-gradient-to-b"> Calculate </button>
-                            ) : null
-                        }
                     </div>
                 </div>
             )}
