@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiResponse } from 'next'
 import { NextResponse } from "next/server";
 import Trailer from '@dims/types/trailer';
 
@@ -13,12 +13,10 @@ const flatbed48: Flatbed48 = {
 }
  
 export async function POST(
-//   req: NextRequest,
-    req: any,
-    res: NextApiResponse
+  req: Request,
+  res: NextApiResponse
 ) {
     const data = await req.json()
-    console.log(data)
 
     const totals = {
         weight: 0,

@@ -70,7 +70,7 @@ export default function Home() {
     }
     const saveStyle = {
         marginBottom: 20,
-        fontSize: 25
+        fontSize: 20
     }
     const deleteButtonStyle = {
         marginLeft: 40,
@@ -80,14 +80,9 @@ export default function Home() {
     return (
         <main className="min-h-screen flex-col items-center justify-between p-24">
             <div className="z-10 max-w-5xl w-full tems-center justify-between font-mono text-sm">
-                <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
+                <p className="fixed font-bold left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
                     Open Deck Dimension Calculator
                 </p>
-                {/* <div className="relative flex py-5 items-center mt-10 text-lg">
-                    Freight
-                    <div className="flex-grow border-t border-gray-400 ml-5"></div>
-                    <div className="flex-grow border-t border-gray-400"></div>
-                </div> */}
                 <div className="grid grid-cols-7 gap-4 my-8 font-bold text-md">
                     <div>Name</div>
                     <div>Quantity</div>
@@ -231,11 +226,26 @@ export default function Home() {
                                     <h1>
                                         Load Requirements:
                                     </h1>
-                                    <h2>
-                                        {`${numberWithCommas(calculatedResponse.loadInput.weight)} lbs`}
-                                        <br />
-                                        {`${numberWithCommas(calculatedResponse.loadInput.area)} sq. in`}
-                                    </h2>
+                                    <div className="grid grid-cols-2 gap-0 mb-2">
+                                        <div className="font-bold">
+                                            Weight:
+                                        </div>
+                                        <div>
+                                            {`${numberWithCommas(calculatedResponse.loadInput.weight)} lbs`}
+                                        </div>
+                                        <div className="font-bold">
+                                            Area:
+                                        </div>
+                                        <div>
+                                            {`${numberWithCommas(calculatedResponse.loadInput.area)} sq in`}
+                                        </div>
+                                        <div className="font-bold">
+                                            Tallest Item:
+                                        </div>
+                                        <div>
+                                            {`${numberWithCommas(calculatedResponse.calculation.height)} in`}
+                                        </div>
+                                    </div>
                                 </>
                             )}
 
