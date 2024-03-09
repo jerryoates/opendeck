@@ -64,7 +64,8 @@ export default function Home() {
 
     const formStyle = {
         marginBottom: 20,
-        color: '#000000'
+        color: '#000000',
+        // appearance: 'text-field'
     }
     const saveStyle = {
         marginBottom: 20,
@@ -81,6 +82,11 @@ export default function Home() {
                 <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
                     Welcome to Open Deck&apos;s Dimension Calculator
                 </p>
+                {/* <div className="relative flex py-5 items-center mt-10 text-lg">
+                    Freight
+                    <div className="flex-grow border-t border-gray-400 ml-5"></div>
+                    <div className="flex-grow border-t border-gray-400"></div>
+                </div> */}
                 <div className="grid grid-cols-7 gap-4 my-8 font-bold text-md">
                     <div>Name</div>
                     <div>Quantity</div>
@@ -148,7 +154,7 @@ export default function Home() {
                                     // style={{ ...formStyle, marginLeft: 1000 }}
                                     onClick={() => onCalculate(savedFreight)}
                                 >
-                                    Calculate
+                                    {'Calculate'}
                                 </button>
                             ) : null
                         }
@@ -163,28 +169,33 @@ export default function Home() {
                         />
                         <input type="number" name="quantity" style={formStyle}
                             value={activeFreight.quantity || ''}
+                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             onChange={event => setActiveFreight({ ...activeFreight, quantity: Number(event.target.value) })}
                         />
                         <input type="number" name="length" style={formStyle}
                             value={activeFreight.length || ''}
+                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             onChange={event => setActiveFreight({ ...activeFreight, length: Number(event.target.value) })}
                         />
                         <input type="number" name="width" style={formStyle}
                             value={activeFreight.height || ''}
+                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             onChange={event => setActiveFreight({ ...activeFreight, height: Number(event.target.value) })}
                         />
                         <input type="number" name="height" style={formStyle}
                             value={activeFreight.width || ''}
+                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             onChange={event => setActiveFreight({ ...activeFreight, width: Number(event.target.value) })}
                         />
                         <input type="number" name="weight" style={formStyle}
                             value={activeFreight.weight || ''}
+                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             onChange={event => setActiveFreight({ ...activeFreight, weight: Number(event.target.value) })}
                         />
                         <button
                             style={saveStyle}
                             onClick={activeFreight.name ? saveFreight : () => window.alert('At least add a name')}
-                        > ✔️
+                        > Add +
                         </button>
                     </div>
                 )}
