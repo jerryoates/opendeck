@@ -97,7 +97,7 @@ export default function Home() {
                 </div> */}
                 <div className="grid grid-cols-7 gap-4 mb-5">
                     {
-                        savedFreight.length ? savedFreight.map((freight: ActiveFreight, index: number) => {
+                        savedFreight.length > 0 && savedFreight.map((freight: ActiveFreight, index: number) => {
                             return (
                                 <>
                                     <div
@@ -130,7 +130,7 @@ export default function Home() {
                                 </>
 
                             )
-                        }) : null
+                        })
                     }
                 </div>
                 {!addFreightMenuOpen ? (
@@ -152,7 +152,6 @@ export default function Home() {
                                 <button
                                     className="fixed top-0 flex flex-col items-center border-b border-grey-300 bg-gradient-to-b from-blue-200 pb-6 pt-8 backdrop-blur-2xl dark:border-blue-800 dark:bg-blue-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-blue-200 lg:p-4 lg:dark:bg-blue-800/30"
                                     type="submit"
-                                    // style={{ ...formStyle, marginLeft: 1000 }}
                                     onClick={() => onCalculate(savedFreight)}
                                 >
                                     {'Calculate'}
