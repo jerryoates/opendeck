@@ -1,2 +1,4 @@
-build:
-	cdk synth
+hello:
+	echo "Hey"
+compile:
+	yarn cdk synth
