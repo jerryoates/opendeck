@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react";
 import { numberWithCommas } from "@dims/utils/numbers";
+import Link from "next/link";
 
 interface ActiveFreight {
     name: string,
@@ -90,24 +91,35 @@ export default function Home() {
             <header>
                 <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
                     <li>
-                        <button className="hover:text-blue-600">
+                        <Link
+                            className="hover:text-blue-600"
+                            href="/about">
                             About
-                        </button>
+                        </Link>
                     </li>
                     <li>
-                        <button className="hover:text-blue-600">
+                        <Link
+                            className="hover:text-blue-600"
+                            href="/contact">
                             Contact
-                        </button>
+                        </Link>
                     </li>
                     <li>
-                        <button className="hover:text-blue-600">
-                            License
-                        </button>
-                    </li>
-                    <li>
-                        <button className="hover:text-blue-600">
+                        <Link
+                            className="hover:text-blue-600"
+                            href="/careers">
                             Careers
-                        </button>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            className="hover:text-blue-600"
+                            href="/license">
+                            License
+                        </Link>
+                    </li>
+                    <li className="mx-1000">
+                        Sign In
                     </li>
                 </ul>
             </header>
@@ -262,15 +274,18 @@ export default function Home() {
             <div>
                 {
                     responseAttempted && calculatedResponse && (
-                        <div className="justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+                        <div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
                             {calculatedResponse.calculation.tooTall ? (
                                 <h1>
                                     {`Based on the height of your input (${calculatedResponse.calculation.height}'), your freight is too tall for a 48' flatbed`}
                                 </h1>
+
                             ) : (
                                 <>
-                                    <h1>
-                                        {`Based on the ${calculatedResponse.calculation.determingFactor} of your input, you need:`}
+                                    <h1 className="flex row-auto">
+                                        <div>
+                                            {`Based on the ${calculatedResponse.calculation.determingFactor} of your input, you need:`}
+                                        </div>
                                     </h1>
                                     <h2 className="font-bold text-lg mt-3">
                                         {`${JSON.stringify(calculatedResponse.calculation.number)} 48' flatbed(s)`}
@@ -299,6 +314,21 @@ export default function Home() {
                                             {`${numberWithCommas(calculatedResponse.calculation.height)} in`}
                                         </div>
                                     </div>
+                                    <button
+                                        className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
+                                        onClick={() => { navigator.clipboard.writeText(JSON.stringify(calculatedResponse)) }}
+                                    >
+                                        Copy 📋
+                                    </button>
+                                    <button
+                                        className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
+                                        onClick={() => {
+                                            setResponseAttempted(false)
+                                            setCalculatedResponse({})
+                                        }}
+                                    >
+                                        Clear X
+                                    </button>
                                 </>
                             )}
 
