@@ -83,7 +83,7 @@ export default function Home() {
                 <p className="fixed font-bold left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
                     Open Deck Dimension Calculator
                 </p>
-                <div className="grid grid-cols-7 gap-4 my-8 font-bold text-md">
+                <div className="grid grid-cols-7 gap-4 mt-8 mb-3 font-bold text-md">
                     <div>Name</div>
                     <div>Quantity</div>
                     <div>Length (in)</div>
@@ -91,6 +91,10 @@ export default function Home() {
                     <div>Height (in)</div>
                     <div>Weight (lbs)</div>
                 </div>
+                {/* <div className="relative flex items-center mt-0 mb-5">
+                    <div className="flex-grow border-t border-gray-400"></div>
+                    <div className="flex-grow border-t border-gray-400"></div>
+                </div> */}
                 <div className="grid grid-cols-7 gap-4 mb-5">
                     {
                         savedFreight.length ? savedFreight.map((freight: ActiveFreight, index: number) => {
