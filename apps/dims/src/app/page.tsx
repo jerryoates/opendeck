@@ -67,7 +67,8 @@ export default function Home() {
     }
 
     const deleteButtonStyle = {
-        marginLeft: 20
+        marginLeft: 40,
+        fontSize: 25,
     }
 
     return (
@@ -76,7 +77,7 @@ export default function Home() {
                 <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
                     Welcome to Open Deck&apos;s Dimension Calculator
                 </p>
-                <div className="grid grid-cols-6 gap-4 my-8 font-bold text-md">
+                <div className="grid grid-cols-7 gap-4 my-8 font-bold text-md">
                     <div>Name</div>
                     <div>Quantity</div>
                     <div>Length (in)</div>
@@ -84,7 +85,7 @@ export default function Home() {
                     <div>Height (in)</div>
                     <div>Weight (lbs)</div>
                 </div>
-                <div className="grid grid-cols-6 gap-4 mb-5">
+                <div className="grid grid-cols-7 gap-4 mb-5">
                     {
                         savedFreight.length ? savedFreight.map((freight: ActiveFreight, index: number) => {
                             return (
@@ -106,28 +107,51 @@ export default function Home() {
                                     </div>
                                     <div>
                                         {`${freight.weight} lbs`}
-                                        <button
-                                            style={deleteButtonStyle}
-                                            onClick={() => {
-                                                const previousFreight = [...savedFreight]
-                                                const newFreight = previousFreight.filter(item => item.name !== freight.name)
-                                                setSavedFreight(newFreight)
-                                            }}
-                                        > X </button>
                                     </div>
+                                    <button
+                                        style={deleteButtonStyle}
+                                        onClick={() => {
+                                            const previousFreight = [...savedFreight]
+                                            const newFreight = previousFreight.filter(item => item.name !== freight.name)
+                                            setSavedFreight(newFreight)
+                                        }}
+                                    > X </button>
                                 </>
 
                             )
                         }) : null
                     }
-                    {!addFreightMenuOpen ? (
+                </div>
+                {!addFreightMenuOpen ? (
+                    <div className="grid grid-cols-7 gap-4 mb-5">
                         <button
                             className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
                             onClick={() => setAddFreightMenuOpen(!addFreightMenuOpen)}
+                            style={{ fontSize: 20 }}
                         >
-                            Add Freight +
+                            +
                         </button>
-                    ) : <>
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        {
+                            savedFreight.length ? (
+                                <button
+                                    className="fixed right-0 top-0 flex w-full border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
+                                    type="submit"
+                                    // style={{ ...formStyle, marginLeft: 1000 }}
+                                    onClick={() => onCalculate(savedFreight)}
+                                >
+                                    Calculate
+                                </button>
+                            ) : null
+                        }
+                    </div >
+
+                ) : (
+                    <div className="grid grid-cols-7 gap-4 mb-5">
                         <input type="text" name="name" style={formStyle}
                             value={activeFreight.name}
                             onChange={event => setActiveFreight({ ...activeFreight, name: event.target.value })}
@@ -152,13 +176,16 @@ export default function Home() {
                             value={activeFreight.weight || ''}
                             onChange={event => setActiveFreight({ ...activeFreight, weight: Number(event.target.value) })}
                         />
-                    </>
-
-                    }
-                </div>
-                <div className="grid grid-cols-5 gap-4 my-5">
-
-                </div>
+                        <button
+                            style={deleteButtonStyle}
+                            onClick={activeFreight.name ? saveFreight : () => window.alert('At least add a name')}
+                        > ✔️
+                        </button>
+                    </div>
+                )}
+            </div>
+            <hr />
+            <div>
                 {
                     responseAttempted && calculatedResponse && (
                         <div className="justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
@@ -180,94 +207,6 @@ export default function Home() {
                         </div>
                     )
                 }
-                {
-                    savedFreight.length ? (
-                        <button
-                            className="fixed right-0 top-0 flex w-full border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
-                            type="submit"
-                            style={{ ...formStyle, marginLeft: 1000 }}
-                            onClick={() => onCalculate(savedFreight)}
-                        >
-                            Calculate
-                        </button>
-                    ) : null
-                }
             </div>
-            <div>
-                {/* {
-                    savedFreight.length ? savedFreight.map((freight: ActiveFreight, index: number) => {
-                        return (
-                            <li key={index} style={formStyle}>
-                                {`${freight.quantity} ${freight.name}`}
-                                <button style={deleteButtonStyle}
-                                    onClick={() => {
-                                        const previousFreight = [...savedFreight]
-                                        const newFreight = previousFreight.filter(item => item.name !== freight.name)
-                                        setSavedFreight(newFreight)
-                                    }}
-                                > X </button>
-                                <br />
-                                {`length: ${freight.length} in`}
-                                <br />
-                                {`width: ${freight.width} in`}
-                                <br />
-                                {`height: ${freight.height} in`}
-                                <br />
-                                {`weight: ${freight.weight} lbs`}
-                                <br />
-                            </li>
-                        )
-                    }) : null
-                } */}
-            </div>
-            {
-                addFreightMenuOpen && (
-                    <div>
-                        <div className="text-lg">
-                            {"Name:   "}
-                            <input type="text" name="name" style={formStyle}
-                                value={activeFreight.name}
-                                onChange={event => setActiveFreight({ ...activeFreight, name: event.target.value })}
-                            />
-                            <br />
-                            {"Quantity:   "}
-                            <input type="number" name="quantity" style={formStyle}
-                                value={activeFreight.quantity || ''}
-                                onChange={event => setActiveFreight({ ...activeFreight, quantity: Number(event.target.value) })}
-                            />
-                            <br />
-                            {"Length (in):   "}
-                            <input type="number" name="length" style={formStyle}
-                                value={activeFreight.length || ''}
-                                onChange={event => setActiveFreight({ ...activeFreight, length: Number(event.target.value) })}
-                            />
-                            <br />
-                            {"Width (in):   "}
-                            <input type="number" name="width" style={formStyle}
-                                value={activeFreight.height || ''}
-                                onChange={event => setActiveFreight({ ...activeFreight, height: Number(event.target.value) })}
-                            />
-                            <br />
-                            {"Height (in):   "}
-                            <input type="number" name="height" style={formStyle}
-                                value={activeFreight.width || ''}
-                                onChange={event => setActiveFreight({ ...activeFreight, width: Number(event.target.value) })}
-                            />
-                            <br />
-                            {"Weight (lbs):   "}
-                            <input type="number" name="weight" style={formStyle}
-                                value={activeFreight.weight || ''}
-                                onChange={event => setActiveFreight({ ...activeFreight, weight: Number(event.target.value) })}
-                            />
-                            <br />
-                            <button
-                                onClick={activeFreight.name ? saveFreight : () => window.alert('At least add a name')}
-                                className="justify-center border-b border-gray-300 bg-gradient-to-b"> Save Freight
-                            </button>
-                            <br />
-                        </div>
-                    </div>
-                )
-            }
         </main >)
 }
