@@ -1,7 +1,6 @@
 "use client"
 import { useState } from "react";
 import { numberWithCommas } from "@dims/utils/numbers";
-import { act } from "react-dom/test-utils";
 
 interface ActiveFreight {
     name: string,
@@ -52,14 +51,6 @@ export default function Home() {
         setSavedFreight([...savedFreight, activeFreight])
         setAddFreightMenuOpen(false)
         clearActiveFreight()
-        // setActiveFreight({
-        //     name: '',
-        //     quantity: 0,
-        //     length: 0,
-        //     width: 0,
-        //     height: 0,
-        //     weight: 0
-        // })
     }
 
     async function onCalculate(savedItems: ActiveFreight[]) {
@@ -79,7 +70,6 @@ export default function Home() {
     const formStyle = {
         marginBottom: 20,
         color: '#000000',
-        // appearance: 'text-field'
     }
     const saveStyle = {
         marginBottom: 20,
@@ -92,7 +82,7 @@ export default function Home() {
     }
     const deleteButtonStyle = {
         marginLeft: 40,
-        fontSize: 25,
+        fontSize: 15,
     }
 
     return (
@@ -258,7 +248,7 @@ export default function Home() {
                                     <h1>
                                         {`Based on the ${calculatedResponse.calculation.determingFactor} of your input, you need:`}
                                     </h1>
-                                    <h2 className="font-bold text-lg">
+                                    <h2 className="font-bold text-lg mt-3">
                                         {`${JSON.stringify(calculatedResponse.calculation.number)} 48' flatbed(s)`}
                                     </h2>
                                     <br />
