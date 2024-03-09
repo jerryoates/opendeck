@@ -63,9 +63,13 @@ export default function Home() {
     }
 
     const formStyle = {
-        marginBottom: 20
+        marginBottom: 20,
+        color: '#000000'
     }
-
+    const saveStyle = {
+        marginBottom: 20,
+        fontSize: 25
+    }
     const deleteButtonStyle = {
         marginLeft: 40,
         fontSize: 25,
@@ -115,7 +119,7 @@ export default function Home() {
                                             const newFreight = previousFreight.filter(item => item.name !== freight.name)
                                             setSavedFreight(newFreight)
                                         }}
-                                    > X </button>
+                                    > 🗑️ </button>
                                 </>
 
                             )
@@ -123,7 +127,7 @@ export default function Home() {
                     }
                 </div>
                 {!addFreightMenuOpen ? (
-                    <div className="grid grid-cols-7 gap-4 mb-5">
+                    <div className="grid grid-cols-7 gap-4 my-10">
                         <button
                             className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
                             onClick={() => setAddFreightMenuOpen(!addFreightMenuOpen)}
@@ -153,6 +157,7 @@ export default function Home() {
                 ) : (
                     <div className="grid grid-cols-7 gap-4 mb-5">
                         <input type="text" name="name" style={formStyle}
+                            className="text-black-900"
                             value={activeFreight.name}
                             onChange={event => setActiveFreight({ ...activeFreight, name: event.target.value })}
                         />
@@ -177,32 +182,36 @@ export default function Home() {
                             onChange={event => setActiveFreight({ ...activeFreight, weight: Number(event.target.value) })}
                         />
                         <button
-                            style={deleteButtonStyle}
+                            style={saveStyle}
                             onClick={activeFreight.name ? saveFreight : () => window.alert('At least add a name')}
                         > ✔️
                         </button>
                     </div>
                 )}
             </div>
-            <hr />
+            <div className="relative flex py-5 items-center my-15">
+                <div className="flex-grow border-t border-gray-400"></div>
+                <span className="flex-shrink mx-4 text-gray-400"> Output </span>
+                <div className="flex-grow border-t border-gray-400"></div>
+            </div>
             <div>
                 {
                     responseAttempted && calculatedResponse && (
                         <div className="justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-                            <h1>
-                                Load Requirements:
-                            </h1>
-                            <br />
-                            <h2>
-                                {`${JSON.stringify(calculatedResponse.loadInput)}`}
-                            </h2>
-                            <br />
                             <h1>
                                 Your Result:
                             </h1>
                             <br />
                             <h2>
                                 {`${JSON.stringify(calculatedResponse.calculation.requiredForWeight)} 48' flatbed(s)`}
+                            </h2>
+                            <br />
+                            <h1>
+                                Load Requirements:
+                            </h1>
+                            <br />
+                            <h2>
+                                {`${JSON.stringify(calculatedResponse.loadInput)}`}
                             </h2>
                         </div>
                     )
