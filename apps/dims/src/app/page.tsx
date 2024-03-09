@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react";
 import { numberWithCommas } from "@dims/utils/numbers";
+import { act } from "react-dom/test-utils";
 
 interface ActiveFreight {
     name: string,
@@ -36,9 +37,7 @@ export default function Home() {
         weight: 0
     })
 
-    function saveFreight() {
-        setSavedFreight([...savedFreight, activeFreight])
-        setAddFreightMenuOpen(false)
+    const clearActiveFreight = () => {
         setActiveFreight({
             name: '',
             quantity: 0,
@@ -47,6 +46,20 @@ export default function Home() {
             height: 0,
             weight: 0
         })
+    }
+
+    function saveFreight() {
+        setSavedFreight([...savedFreight, activeFreight])
+        setAddFreightMenuOpen(false)
+        clearActiveFreight()
+        // setActiveFreight({
+        //     name: '',
+        //     quantity: 0,
+        //     length: 0,
+        //     width: 0,
+        //     height: 0,
+        //     weight: 0
+        // })
     }
 
     async function onCalculate(savedItems: ActiveFreight[]) {
@@ -72,6 +85,11 @@ export default function Home() {
         marginBottom: 20,
         fontSize: 20
     }
+    const cancelStyle = {
+        marginBottom: 20,
+        fontSize: 20,
+        marginLeft: 40
+    }
     const deleteButtonStyle = {
         marginLeft: 40,
         fontSize: 25,
@@ -83,7 +101,7 @@ export default function Home() {
                 <p className="fixed font-bold left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
                     Open Deck Dimension Calculator
                 </p>
-                <div className="grid grid-cols-7 gap-4 mt-8 mb-3 font-bold text-md">
+                <div className="grid grid-cols-7 gap-4 mt-8 mb-8 font-bold text-md">
                     <div>Name</div>
                     <div>Quantity</div>
                     <div>Length (in)</div>
@@ -192,11 +210,29 @@ export default function Home() {
                             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             onChange={event => setActiveFreight({ ...activeFreight, weight: Number(event.target.value) })}
                         />
-                        <button
-                            style={saveStyle}
-                            onClick={activeFreight.name ? saveFreight : () => window.alert('At least add a name')}
-                        > Add +
-                        </button>
+                        {
+                            addFreightMenuOpen &&
+                                activeFreight.name &&
+                                activeFreight.height &&
+                                activeFreight.length &&
+                                activeFreight.width &&
+                                activeFreight.quantity &&
+                                activeFreight.weight ? (
+                                <button
+                                    style={saveStyle}
+                                    onClick={activeFreight.name ? saveFreight : () => window.alert('At least add a name')}
+                                > Add +
+                                </button>
+                            ) :
+                                <button
+                                    onClick={() => {
+                                        setAddFreightMenuOpen(false)
+                                        clearActiveFreight()
+                                    }}
+                                    style={cancelStyle}>
+                                    ❌
+                                </button>
+                        }
                     </div>
                 )}
             </div>
