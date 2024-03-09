@@ -86,8 +86,32 @@ export default function Home() {
     }
 
     return (
-        <main className="min-h-screen flex-col items-center justify-between p-24">
-            <div className="z-10 max-w-5xl w-full tems-center justify-between font-mono text-sm">
+        <main className="min-h-screen flex-col items-center justify-between pt-10 p-20">
+            <header>
+                <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
+                    <li>
+                        <button className="hover:text-blue-600">
+                            About
+                        </button>
+                    </li>
+                    <li>
+                        <button className="hover:text-blue-600">
+                            Contact
+                        </button>
+                    </li>
+                    <li>
+                        <button className="hover:text-blue-600">
+                            License
+                        </button>
+                    </li>
+                    <li>
+                        <button className="hover:text-blue-600">
+                            Careers
+                        </button>
+                    </li>
+                </ul>
+            </header>
+            <div className="z-10 max-w-5xl w-full tems-center justify-between font-mono text-sm mt-20">
                 <p className="fixed font-bold left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
                     Open Deck Dimension Calculator
                 </p>
@@ -162,7 +186,7 @@ export default function Home() {
                                     type="submit"
                                     onClick={() => onCalculate(savedFreight)}
                                 >
-                                    {'Calculate'}
+                                    {'Calculate 🔄'}
                                 </button>
                             )
                         }
