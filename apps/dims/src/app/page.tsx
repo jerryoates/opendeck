@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react";
+import { numberWithCommas } from "@dims/utils/numbers";
 
 interface ActiveFreight {
     name: string,
@@ -147,7 +148,7 @@ export default function Home() {
                         <div />
                         <div />
                         {
-                            savedFreight.length ? (
+                            savedFreight.length > 0 && (
                                 <button
                                     className="fixed right-0 top-0 flex w-full border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
                                     type="submit"
@@ -156,7 +157,7 @@ export default function Home() {
                                 >
                                     {'Calculate'}
                                 </button>
-                            ) : null
+                            )
                         }
                     </div >
 
@@ -178,14 +179,14 @@ export default function Home() {
                             onChange={event => setActiveFreight({ ...activeFreight, length: Number(event.target.value) })}
                         />
                         <input type="number" name="width" style={formStyle}
-                            value={activeFreight.height || ''}
-                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            onChange={event => setActiveFreight({ ...activeFreight, height: Number(event.target.value) })}
-                        />
-                        <input type="number" name="height" style={formStyle}
                             value={activeFreight.width || ''}
                             className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             onChange={event => setActiveFreight({ ...activeFreight, width: Number(event.target.value) })}
+                        />
+                        <input type="number" name="height" style={formStyle}
+                            value={activeFreight.height || ''}
+                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            onChange={event => setActiveFreight({ ...activeFreight, height: Number(event.target.value) })}
                         />
                         <input type="number" name="weight" style={formStyle}
                             value={activeFreight.weight || ''}
@@ -200,30 +201,43 @@ export default function Home() {
                     </div>
                 )}
             </div>
-            <div className="relative flex py-5 items-center my-15">
-                <div className="flex-grow border-t border-gray-400"></div>
-                <span className="flex-shrink mx-4 text-gray-400"> Output </span>
-                <div className="flex-grow border-t border-gray-400"></div>
-            </div>
+            {
+                responseAttempted && calculatedResponse && (
+                    <div className="relative flex py-5 items-center my-15">
+                        <div className="flex-grow border-t border-gray-400"></div>
+                        <span className="flex-shrink mx-4 text-gray-400"> Output </span>
+                        <div className="flex-grow border-t border-gray-400"></div>
+                    </div>
+                )
+            }
             <div>
                 {
                     responseAttempted && calculatedResponse && (
                         <div className="justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-                            <h1>
-                                Your Result:
-                            </h1>
-                            <br />
-                            <h2>
-                                {`${JSON.stringify(calculatedResponse.calculation.requiredForWeight)} 48' flatbed(s)`}
-                            </h2>
-                            <br />
-                            <h1>
-                                Load Requirements:
-                            </h1>
-                            <br />
-                            <h2>
-                                {`${JSON.stringify(calculatedResponse.loadInput)}`}
-                            </h2>
+                            {calculatedResponse.calculation.tooTall ? (
+                                <h1>
+                                    {`Based on the height of your input (${calculatedResponse.calculation.height}'), your freight is too tall for a 48' flatbed`}
+                                </h1>
+                            ) : (
+                                <>
+                                    <h1>
+                                        {`Based on the ${calculatedResponse.calculation.determingFactor} of your input, you need:`}
+                                    </h1>
+                                    <h2 className="font-bold">
+                                        {`${JSON.stringify(calculatedResponse.calculation.number)} 48' flatbed(s)`}
+                                    </h2>
+                                    <br />
+                                    <h1>
+                                        Load Requirements:
+                                    </h1>
+                                    <h2>
+                                        {`${numberWithCommas(calculatedResponse.loadInput.weight)} lbs`}
+                                        <br />
+                                        {`${numberWithCommas(calculatedResponse.loadInput.area)} sq. in`}
+                                    </h2>
+                                </>
+                            )}
+
                         </div>
                     )
                 }

@@ -7,8 +7,8 @@ type Flatbed48 = Trailer
 const flatbed48: Flatbed48 = {
     length: 576,
     width: 102,
+    area: 58752,
     height: 102,
-    volume: 5992704,
     carryingCapacity: 48000,
 }
  
@@ -22,38 +22,37 @@ export async function POST(
 
     const totals = {
         weight: 0,
-        volume: 0,
+        area: 0,
         maxHeight: 0,
-        maxLength: 0,
-        maxWidth: 0
     }
 
     for (const item of data) {
         totals.weight += item.weight * item.quantity
-        totals.volume += item.quantity * (item.length * item.height * item.width)
+        totals.area += item.quantity * (item.length * item.width)
 
         if (item.height > totals.maxHeight)
             totals.maxHeight = item.height
-
-        if (item.width > totals.maxWidth)
-            totals.maxWidth = item.width
-
-        if (item.length > totals.maxLength)
-            totals.maxLength = item.length
     }
 
     const requiredForWeight = Math.ceil(totals.weight / flatbed48.carryingCapacity)
-    const requiredForVolume = Math.ceil(totals.volume / flatbed48.volume) 
+    const requiredForVolume = Math.ceil(totals.area / flatbed48.area) 
+    const number = requiredForWeight > requiredForVolume ? requiredForWeight : requiredForVolume
 
-    const determingFactor = requiredForWeight > requiredForVolume ? 'weight' : 'volume'
+    let determingFactor = requiredForWeight > requiredForVolume ? 'weight' : 'total area'
+
+    const tooTall = totals.maxHeight > flatbed48.height
+    
+    if (tooTall)
+        determingFactor = 'height'
 
     return NextResponse.json(
         {
             loadInput: totals,
             calculation: {
-                requiredForWeight,
-                requiredForVolume,
-                determingFactor
+                number,
+                determingFactor,
+                tooTall,
+                height: totals.maxHeight
             }
         },
         { status: 200 }

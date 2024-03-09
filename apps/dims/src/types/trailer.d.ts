@@ -2,6 +2,6 @@ export default interface Trailer {
     length: number,
     width: number,
     height: number,
-    volume: number
+    area: number
     carryingCapacity: number,
 }
