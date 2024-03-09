@@ -81,7 +81,7 @@ export default function Home() {
         <main className="min-h-screen flex-col items-center justify-between p-24">
             <div className="z-10 max-w-5xl w-full tems-center justify-between font-mono text-sm">
                 <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
-                    Welcome to Open Deck&apos;s Dimension Calculator
+                    Open Deck Dimension Calculator
                 </p>
                 {/* <div className="relative flex py-5 items-center mt-10 text-lg">
                     Freight
@@ -101,7 +101,8 @@ export default function Home() {
                         savedFreight.length ? savedFreight.map((freight: ActiveFreight, index: number) => {
                             return (
                                 <>
-                                    <div>
+                                    <div
+                                        className="font-bold">
                                         {`${freight.name}`}
                                     </div>
                                     <div>
@@ -150,7 +151,7 @@ export default function Home() {
                         {
                             savedFreight.length > 0 && (
                                 <button
-                                    className="fixed top-0 flex flex-col items-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
+                                    className="fixed top-0 flex flex-col items-center border-b border-grey-300 bg-gradient-to-b from-blue-200 pb-6 pt-8 backdrop-blur-2xl dark:border-blue-800 dark:bg-blue-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-blue-200 lg:p-4 lg:dark:bg-blue-800/30"
                                     type="submit"
                                     // style={{ ...formStyle, marginLeft: 1000 }}
                                     onClick={() => onCalculate(savedFreight)}
@@ -223,7 +224,7 @@ export default function Home() {
                                     <h1>
                                         {`Based on the ${calculatedResponse.calculation.determingFactor} of your input, you need:`}
                                     </h1>
-                                    <h2 className="font-bold">
+                                    <h2 className="font-bold text-lg">
                                         {`${JSON.stringify(calculatedResponse.calculation.number)} 48' flatbed(s)`}
                                     </h2>
                                     <br />
