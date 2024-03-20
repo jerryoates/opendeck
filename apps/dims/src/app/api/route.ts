@@ -96,5 +96,7 @@ export async function POST(
 
     response.loadInput = totals
 
+    console.log(response)
+
     return NextResponse.json( response, { status: 200 });
 }

@@ -282,7 +282,7 @@ export default function Home() {
                                     </h2 >
                                     {calculatedResponse.nonFitPieces.map((piece: any) =>
                                         <>
-                                            <div> {`${piece.item.quantity}x ${(piece.item.name)} - ${(piece.reason)}`}</div>
+                                            <div className="my-2"> {`${piece.item.quantity}x ${(piece.item.name)} - ${(piece.reason)}`}</div>
                                         </>
                                     )}
                                     <div className="relative flex py-5 items-center mt-15">
@@ -293,11 +293,11 @@ export default function Home() {
                             )}
                             <h1 className="flex text-lg row-auto mt-0 font-bold">
                                 <div>
-                                    {`For fitting pieces, you need:`}
+                                    {calculatedResponse.nonFitPieces.length > 0 ? `For fitting pieces, you need:` : `You need:`}
                                 </div>
                             </h1>
                             <h2 className="text-md mt-2">
-                                {`${JSON.stringify(calculatedResponse.calculation.number)} 48' flatbed(s)`}
+                                {`${calculatedResponse.calculation.number} 48' Flatbed${calculatedResponse.calculation.number.length > 0 ? 's' : ''}`}
                             </h2>
                             <br />
                             <h1 className="text-lg font-bold">
