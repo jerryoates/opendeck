@@ -275,6 +275,16 @@ export default function Home() {
                 {
                     responseAttempted && calculatedResponse && (
                         <div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+                            {calculatedResponse.nonFitPieces.length > 0 && (
+                                calculatedResponse.nonFitPieces.map((piece: any) =>
+                                    <>
+                                        < h2 className="font-bold text-lg mt-3" >
+                                            Non Fit Pieces:
+                                        </h2 >
+                                        <div> {`${(piece.item.name)} - ${(piece.reason)}`}</div>
+                                    </>
+                                )
+                            )}
                             {calculatedResponse.calculation.tooTall ? (
                                 <h1>
                                     {`Based on the height of your input (${calculatedResponse.calculation.height}'), your freight is too tall for a 48' flatbed`}
@@ -315,10 +325,10 @@ export default function Home() {
                                         </div>
                                     </div>
                                     <button
-                                        className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
+                                        className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
                                         onClick={() => { navigator.clipboard.writeText(JSON.stringify(calculatedResponse)) }}
                                     >
-                                        Copy 📋
+                                        Copy &nbsp;&nbsp; 📋
                                     </button>
                                     <button
                                         className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
@@ -327,7 +337,7 @@ export default function Home() {
                                             setCalculatedResponse({})
                                         }}
                                     >
-                                        Clear X
+                                        Clear &nbsp;&nbsp; ❌
                                     </button>
                                 </>
                             )}

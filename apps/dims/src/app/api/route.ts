@@ -11,10 +11,25 @@ const flatbed48: Flatbed48 = {
     height: 102,
     carryingCapacity: 48000,
 }
+
+interface NonFitPiece {
+    item: {},
+    reason: string
+}
+
+interface Flatbed48Response {
+    loadInput: {
+
+    },
+    calculation: {
+
+    }
+    nonFitPieces: NonFitPiece[]
+}
  
 export async function POST(
   req: Request,
-  res: NextApiResponse
+  res: NextResponse
 ) {
     const data = await req.json()
 
@@ -24,7 +39,35 @@ export async function POST(
         maxHeight: 0,
     }
 
+    const response: Flatbed48Response = {
+        loadInput: {},
+        calculation: {},
+        nonFitPieces: []
+    }
+
     for (const item of data) {
+        if (item.heigth > flatbed48.height) {
+            response.nonFitPieces.push({
+                item,
+                reason: 'height'
+            })
+            continue;
+        }
+        if (item.weight > flatbed48.carryingCapacity) {
+            response.nonFitPieces.push({
+                item,
+                reason: 'weight'
+            })
+            continue;
+        }
+        if (item.length > flatbed48.length) {
+            response.nonFitPieces.push({
+                item,
+                reason: 'length'
+            })
+            continue;
+        }
+
         totals.weight += item.weight * item.quantity
         totals.area += item.quantity * (item.length * item.width)
 
@@ -43,16 +86,14 @@ export async function POST(
     if (tooTall)
         determingFactor = 'height'
 
-    return NextResponse.json(
-        {
-            loadInput: totals,
-            calculation: {
-                number,
-                determingFactor,
-                tooTall,
-                height: totals.maxHeight
-            }
-        },
-        { status: 200 }
-    );
+    response.calculation = {
+        number,
+        determingFactor,
+        tooTall,
+        height: totals.maxHeight
+    }
+
+    response.loadInput = totals
+
+    return NextResponse.json( response, { status: 200 });
 }
