@@ -46,24 +46,31 @@ export async function POST(
     }
 
     for (const item of data) {
-        if (item.heigth > flatbed48.height) {
+        if (item.height > flatbed48.height) {
             response.nonFitPieces.push({
                 item,
-                reason: 'height'
+                reason: 'Too Tall'
             })
             continue;
         }
         if (item.weight > flatbed48.carryingCapacity) {
             response.nonFitPieces.push({
                 item,
-                reason: 'weight'
+                reason: 'Too Heavy'
             })
             continue;
         }
         if (item.length > flatbed48.length) {
             response.nonFitPieces.push({
                 item,
-                reason: 'length'
+                reason: 'Too Long'
+            })
+            continue;
+        }
+        if (item.width > flatbed48.width) {
+            response.nonFitPieces.push({
+                item,
+                reason: 'Too Wide'
             })
             continue;
         }
@@ -81,15 +88,9 @@ export async function POST(
 
     let determingFactor = requiredForWeight > requiredForVolume ? 'weight' : 'total area'
 
-    const tooTall = totals.maxHeight > flatbed48.height
-    
-    if (tooTall)
-        determingFactor = 'height'
-
     response.calculation = {
         number,
         determingFactor,
-        tooTall,
         height: totals.maxHeight
     }
 

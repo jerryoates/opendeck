@@ -276,72 +276,64 @@ export default function Home() {
                     responseAttempted && calculatedResponse && (
                         <div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
                             {calculatedResponse.nonFitPieces.length > 0 && (
-                                calculatedResponse.nonFitPieces.map((piece: any) =>
-                                    <>
-                                        < h2 className="font-bold text-lg mt-3" >
-                                            Non Fit Pieces:
-                                        </h2 >
-                                        <div> {`${(piece.item.name)} - ${(piece.reason)}`}</div>
-                                    </>
-                                )
+                                <div>
+                                    < h2 className="font-bold text-lg mt-3" >
+                                        Some of your pieces don&apos;t fit on a 48' flatbed:
+                                    </h2 >
+                                    {calculatedResponse.nonFitPieces.map((piece: any) =>
+                                        <>
+                                            <div> {`${piece.item.quantity}x ${(piece.item.name)} - ${(piece.reason)}`}</div>
+                                        </>
+                                    )}
+                                </div>
                             )}
-                            {calculatedResponse.calculation.tooTall ? (
-                                <h1>
-                                    {`Based on the height of your input (${calculatedResponse.calculation.height}'), your freight is too tall for a 48' flatbed`}
-                                </h1>
-
-                            ) : (
-                                <>
-                                    <h1 className="flex row-auto">
-                                        <div>
-                                            {`Based on the ${calculatedResponse.calculation.determingFactor} of your input, you need:`}
-                                        </div>
-                                    </h1>
-                                    <h2 className="font-bold text-lg mt-3">
-                                        {`${JSON.stringify(calculatedResponse.calculation.number)} 48' flatbed(s)`}
-                                    </h2>
-                                    <br />
-                                    <h1>
-                                        Load Requirements:
-                                    </h1>
-                                    <div className="grid grid-cols-2 gap-0 mb-2">
-                                        <div className="font-bold">
-                                            Weight:
-                                        </div>
-                                        <div>
-                                            {`${numberWithCommas(calculatedResponse.loadInput.weight)} lbs`}
-                                        </div>
-                                        <div className="font-bold">
-                                            Area:
-                                        </div>
-                                        <div>
-                                            {`${numberWithCommas(calculatedResponse.loadInput.area)} sq in`}
-                                        </div>
-                                        <div className="font-bold">
-                                            Tallest Item:
-                                        </div>
-                                        <div>
-                                            {`${numberWithCommas(calculatedResponse.calculation.height)} in`}
-                                        </div>
-                                    </div>
-                                    <button
-                                        className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
-                                        onClick={() => { navigator.clipboard.writeText(JSON.stringify(calculatedResponse)) }}
-                                    >
-                                        Copy &nbsp;&nbsp; 📋
-                                    </button>
-                                    <button
-                                        className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
-                                        onClick={() => {
-                                            setResponseAttempted(false)
-                                            setCalculatedResponse({})
-                                        }}
-                                    >
-                                        Clear &nbsp;&nbsp; ❌
-                                    </button>
-                                </>
-                            )}
-
+                            <h1 className="flex text-lg row-auto mt-7 font-bold">
+                                <div>
+                                    {`For Fitting Pieces, you need:`}
+                                </div>
+                            </h1>
+                            <h2 className="text-md mt-2">
+                                {`${JSON.stringify(calculatedResponse.calculation.number)} 48' flatbed(s)`}
+                            </h2>
+                            <br />
+                            <h1 className="text-lg font-bold">
+                                Load Requirements:
+                            </h1>
+                            <div className="grid grid-cols-2 gap-0 mb-2">
+                                <div className="font-bold">
+                                    Weight:
+                                </div>
+                                <div>
+                                    {`${numberWithCommas(calculatedResponse.loadInput.weight)} lbs`}
+                                </div>
+                                <div className="font-bold">
+                                    Area:
+                                </div>
+                                <div>
+                                    {`${numberWithCommas(calculatedResponse.loadInput.area)} sq in`}
+                                </div>
+                                <div className="font-bold">
+                                    Tallest Item:
+                                </div>
+                                <div>
+                                    {`${numberWithCommas(calculatedResponse.calculation.height)} in`}
+                                </div>
+                            </div>
+                            <button
+                                className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
+                                onClick={() => { navigator.clipboard.writeText(JSON.stringify(calculatedResponse)) }}
+                            >
+                                Copy &nbsp;&nbsp; 📋
+                            </button>
+                            <button
+                                className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
+                                onClick={() => {
+                                    setResponseAttempted(false)
+                                    setCalculatedResponse({})
+                                }}
+                            >
+                                Clear &nbsp;&nbsp; ❌
+                            </button>
                         </div>
                     )
                 }
