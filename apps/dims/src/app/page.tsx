@@ -278,18 +278,22 @@ export default function Home() {
                             {calculatedResponse.nonFitPieces.length > 0 && (
                                 <div>
                                     < h2 className="font-bold text-lg mt-3" >
-                                        Some of your pieces don&apos;t fit on a 48' flatbed:
+                                        Some of your pieces don&apos;t fit on a 48&apos; flatbed:
                                     </h2 >
                                     {calculatedResponse.nonFitPieces.map((piece: any) =>
                                         <>
                                             <div> {`${piece.item.quantity}x ${(piece.item.name)} - ${(piece.reason)}`}</div>
                                         </>
                                     )}
+                                    <div className="relative flex py-5 items-center mt-15">
+                                        <div className="flex-grow border-t border-gray-400"></div>
+                                        <div className="flex-grow border-t border-gray-400"></div>
+                                    </div>
                                 </div>
                             )}
-                            <h1 className="flex text-lg row-auto mt-7 font-bold">
+                            <h1 className="flex text-lg row-auto mt-0 font-bold">
                                 <div>
-                                    {`For Fitting Pieces, you need:`}
+                                    {`For fitting pieces, you need:`}
                                 </div>
                             </h1>
                             <h2 className="text-md mt-2">
