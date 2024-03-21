@@ -9,7 +9,7 @@ export default class Shipment {
 
     createdAt: Date
     trucks: Truck[]
-    nonFitPieces: []
+    nonFitPieces: any[]
 
     addTruck(truck: Truck) {
         this.trucks.push(truck)

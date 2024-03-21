@@ -1,4 +1,4 @@
-export default interface Trailer {
+interface Trailer {
     name: string
     length: number,
     width: number,
@@ -18,4 +18,4 @@ const flatbed48: Flatbed48 = {
     carryingCapacity: 48000,
 }
 
-export { Trailer, flatbed48 }
+export { type Trailer, flatbed48 }

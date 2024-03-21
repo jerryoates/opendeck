@@ -1,4 +1,4 @@
-import { Trailer, flatbed48 } from "./trailer"
+import { Trailer, flatbed48 } from '@dims/types/trailer'
 
 export default class Truck {
     constructor() {
@@ -8,34 +8,35 @@ export default class Truck {
         this.items = []
     }
 
-    trailerType: Trailer.name // default to smallest // upgrade lader
     items: any[]
     trailer: Trailer = flatbed48 // start with smallest
     currentCapacity: number
     areaUsed: number
 
-    canFitItem(item) {
+    canFitItem(item: any) {
         if (item.weight + this.currentCapacity > this.trailer.carryingCapacity)
             return false
         else if (item.length > this.trailer.length && item.width > this.trailer.length) // too long or wide in one dimension
             return false
         else if (item.length > this.trailer.width && item.length > this.trailer.width) // too long or wide in one dimension
             return false
-        else if ((item.length * item.width) > this.trailer - this.areaUsed)
+        else if ((item.length * item.width) > this.trailer.area - this.areaUsed)
             return false
         else
             return true
     }
 
     upgradeTrailerType() {
+        // call check trailer types
         // current capcity
     }
 
-    checkTrailerTypes() {
-
+    checkTrailerTypes(trailerTypes: any[]) {
+        // check current values against trailer types
+        // 
     }
 
-    addItem(item) {
+    addItem(item: any) {
         if (this.canFitItem(item)) {
             this.currentCapacity += item.weight
             this.areaUsed += item.length * item.width
