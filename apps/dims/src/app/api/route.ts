@@ -5,6 +5,7 @@ import Trailer from '@dims/types/trailer';
 type Flatbed48 = Trailer
 
 const flatbed48: Flatbed48 = {
+    name: 'Flatbed 48',
     length: 576,
     width: 102,
     area: 58752,
@@ -27,6 +28,14 @@ interface Flatbed48Response {
     nonFitPieces: NonFitPiece[]
 }
  
+
+interface Truck {
+    type: string,
+    items: []
+}
+
+type Trucks = Truck[]
+
 export async function POST(
   req: Request,
   res: NextResponse
@@ -60,7 +69,7 @@ export async function POST(
             })
             continue;
         }
-        if (item.length > flatbed48.length) {
+        if (item.length > flatbed48.length) { // CHECK TO SWAP LENGTH AND WIDTH
             response.nonFitPieces.push({
                 item,
                 reason: 'Too Long'
@@ -74,6 +83,17 @@ export async function POST(
             })
             continue;
         }
+
+        // if totals.weight + item.weight > trailer.capacity ---- CHECK ALL TRAILER TYPES - is more trucks better?
+        // push truck with items where working total
+        // set working totals to 0
+
+        if (item.weight + totals.weight > flatbed48.carryingCapacity ||
+            (item.length * item.width) + totals.area > flatbed48.area) {
+
+        }
+
+        // else add item
 
         totals.weight += item.weight * item.quantity
         totals.area += item.quantity * (item.length * item.width)

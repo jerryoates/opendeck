@@ -203,6 +203,16 @@ export default function Home() {
                             )
                         }
                     </div >
+                    /**
+                     * Truck 1 
+                     * - item 
+                     * - duplicate
+                     * - item
+                     * 
+                     * Truck 2
+                     * - same item
+                     * - same item
+                     */
 
                 ) : (
                     <div className="grid grid-cols-7 gap-4 mb-5">
