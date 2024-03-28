@@ -22,6 +22,8 @@ export default class Truck {
             return false
         else if ((item.length * item.width) > this.trailer.area - this.areaUsed)
             return false
+        else if (item.height > this.trailer.height)
+            return false
         else
             return true
     }

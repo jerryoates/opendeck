@@ -48,10 +48,10 @@ export async function POST(
                 truck.addItem(item)
             } else {
                 // see if upgrade truck, and if fits after upgrade
-                shipment.addTruck(truck)
                 truck = new Truck()
                 if (truck.canFitItem(item)) {
                     truck.addItem(item)
+                    shipment.addTruck(truck)
                 } else {
                     shipment.nonFitPieces.push(item)
                 }

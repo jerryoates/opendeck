@@ -165,14 +165,19 @@ export default function Home() {
                                     <div>
                                         {`${freight.weight} lbs`}
                                     </div>
-                                    <button
-                                        style={deleteButtonStyle}
-                                        onClick={() => {
-                                            const previousFreight = [...savedFreight]
-                                            const newFreight = previousFreight.filter(item => item.name !== freight.name)
-                                            setSavedFreight(newFreight)
-                                        }}
-                                    > 🗑️ </button>
+                                    <div>
+                                        <button className="text-lg">
+                                            ✎
+                                        </button>
+                                        <button
+                                            style={deleteButtonStyle}
+                                            onClick={() => {
+                                                const previousFreight = [...savedFreight]
+                                                const newFreight = previousFreight.filter(item => item.name !== freight.name)
+                                                setSavedFreight(newFreight)
+                                            }}
+                                        > 🗑️ </button>
+                                    </div>
                                 </>
 
                             )
@@ -288,7 +293,11 @@ export default function Home() {
                     shipment.trucks.map((truck: any, index: number) => {
                         return (<div className="my-3">
                             <div className="font-bold">
-                                {`${truck.trailer.name} ${index + 1}: `}
+                                {`${truck.trailer.name} ${index + 1}`}
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                {`${truck.areaUsed}(sq. in) / ${truck.trailer.area}`}
                             </div>
                             {
                                 truck.items.map((item: any) =>
@@ -297,6 +306,18 @@ export default function Home() {
                             }
                         </div>)
                     })
+                )}
+                {responseAttempted && shipment.nonFitPieces && (
+                    <div>
+                        <div className="mt-3 font-bold">
+                            Non Fits:
+                        </div>
+                        {shipment.nonFitPieces.map((item: any, index: number) =>
+                            <div>
+                                {`${item.name}`}
+                            </div>
+                        )}
+                    </div>
                 )}
                 {
                     // responseAttempted && calculatedResponse && (
