@@ -5,6 +5,9 @@ import GridRow from "@dims/components/FreightGrid/GridRow";
 import Header from "@dims/components/Header";
 import GridColumnHeaders from "@dims/components/FreightGrid/GridColumnHeaders";
 import InputRow from "@dims/components/FreightGrid/InputRow";
+import GridFooter from "@dims/components/FreightGrid/GridFooter";
+import OutputBar from "@dims/components/OutputBar";
+import TitleBar from "@dims/components/TitleBar";
 
 interface ActiveFreight {
     name: string,
@@ -71,19 +74,6 @@ export default function Home() {
         setResponseAttempted(true)
     }
 
-    const formStyle = {
-        marginBottom: 20,
-        color: '#000000',
-    }
-    const saveStyle = {
-        marginBottom: 20,
-        fontSize: 20
-    }
-    const cancelStyle = {
-        marginBottom: 20,
-        fontSize: 20,
-        marginLeft: 40
-    }
     const deleteButtonStyle = {
         marginLeft: 40,
         fontSize: 15,
@@ -93,13 +83,11 @@ export default function Home() {
         <main className="min-h-screen flex-col items-center justify-between pt-10 p-20">
             <Header />
             <div className="z-10 max-w-5xl w-full tems-center justify-between font-mono text-sm mt-20">
-                <p className="fixed font-bold left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
-                    Open Deck Dimension Calculator
-                </p>
+                <TitleBar />
                 <GridColumnHeaders />
                 <div className="grid grid-cols-7 gap-4 mb-5">
                     {
-                        savedFreight.length > 0 && savedFreight.map((freight: ActiveFreight, index: number) => {
+                        savedFreight.length && savedFreight.map((freight: ActiveFreight, index: number) => {
                             return (
                                 <>
                                     <GridRow freight={freight} />
@@ -122,71 +110,47 @@ export default function Home() {
                         })
                     }
                 </div>
-                {!addFreightMenuOpen ? (
-                    <div className="grid grid-cols-7 gap-4 my-10">
-                        <button
-                            className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
-                            onClick={() => setAddFreightMenuOpen(!addFreightMenuOpen)}
-                            style={{ fontSize: 20 }}
-                        >
-                            +
-                        </button>
-                        <div />
-                        <div />
-                        <div />
-                        <div />
-                        <div />
-                        {
-                            savedFreight.length > 0 && (
-                                <button
-                                    className="fixed top-0 flex flex-col items-center border-b border-grey-300 bg-gradient-to-b from-blue-200 pb-6 pt-8 backdrop-blur-2xl dark:border-blue-800 dark:bg-blue-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-blue-200 lg:p-4 lg:dark:bg-blue-800/30"
-                                    type="submit"
-                                    onClick={() => onCalculate(savedFreight)}
-                                >
-                                    {'Calculate 🔄'}
-                                </button>
-                            )
-                        }
-                    </div >
+                {addFreightMenuOpen ? (
+                    <InputRow
+                        activeFreight={activeFreight}
+                        setActiveFreight={setActiveFreight}
+                        addFreightMenuOpen={addFreightMenuOpen}
+                        saveFreight={saveFreight}
+                        clearActiveFreight={clearActiveFreight}
+                        setAddFreightMenuOpen={setAddFreightMenuOpen}
+                    />
                 ) : (
-                    <div className="grid grid-cols-7 gap-4 mb-5">
-                        <InputRow
-                            activeFreight={activeFreight}
-                            setActiveFreight={setActiveFreight}
-                            addFreightMenuOpen={addFreightMenuOpen}
-                            saveFreight={saveFreight}
-                            clearActiveFreight={clearActiveFreight}
-                            setAddFreightMenuOpen={setAddFreightMenuOpen}
-                        />
-                    </div>
+                    <GridFooter
+                        setAddFreightMenuOpen={setAddFreightMenuOpen}
+                        addFreightMenuOpen={addFreightMenuOpen}
+                        onCalculate={onCalculate}
+                        savedFreight={savedFreight}
+                    />
                 )}
             </div>
-            {
-                responseAttempted && calculatedResponse && (
-                    <div className="relative flex py-5 items-center my-15">
-                        <div className="flex-grow border-t border-gray-400"></div>
-                        <span className="flex-shrink mx-4 text-gray-400"> Output </span>
-                        <div className="flex-grow border-t border-gray-400"></div>
-                    </div>
-                )
+            {responseAttempted && calculatedResponse && (
+                <OutputBar />
+            )
             }
             <div>
                 {responseAttempted && shipment && (
                     shipment.trucks.map((truck: any, index: number) => {
-                        return (<div className="my-3" key={index}>
-                            <div className="font-bold">
-                                {`${index + 1}. ${truck.trailer.name}`}
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                {`${truck.areaUsed}(sq. in) / ${truck.trailer.area}`}
-                            </div>
-                            {
-                                truck.items.map((item: any, index: number) =>
-                                    <div key={index}>{`${item.name} - ${item.length}in/${item.width}in/${numberWithCommas(item.weight)}lbs`}</div>
-                                )
-                            }
-                        </div>)
+                        return (
+                            <div className="my-3" key={index}>
+                                <div className="font-bold">
+                                    {`${index + 1}. ${truck.trailer.name}`}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    {`${truck.areaUsed}(sq. in) / ${truck.trailer.area}`}
+                                </div>
+                                {
+                                    truck.items.map((item: any, index: number) =>
+                                        <div key={index}>{`${item.name} - ${item.length}in/${item.width}in/${numberWithCommas(item.weight)}lbs`}</div>
+                                    )
+                                }
+                            </div>)
+
                     })
                 )}
                 {responseAttempted && shipment.nonFitPieces.length > 0 && (
