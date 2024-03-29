@@ -20,16 +20,6 @@ interface NonFitPiece {
     reason: string
 }
 
-interface Flatbed48Response {
-    loadInput: {
-
-    },
-    calculation: {
-
-    }
-    nonFitPieces: NonFitPiece[]
-}
-
 export async function POST(
   req: Request,
   res: NextResponse
@@ -41,16 +31,18 @@ export async function POST(
 
     for (const item of data) {
         // if totals.weight + item.weight > trailer.capacity ---- CHECK ALL TRAILER TYPES - is more trucks better?
-        // push truck with items where working total
-        // set working totals to 0
+    
         for (let i = 0; i < item.quantity; i++) {
             if (truck.canFitItem(item)) {
                 truck.addItem(item)
             } else {
+                console.log('doesnt fit: ', item.name)
                 // see if upgrade truck, and if fits after upgrade
                 truck = new Truck()
                 if (truck.canFitItem(item)) {
                     truck.addItem(item)
+
+                    console.log('adding item and truck in here: ', truck)
                     shipment.addTruck(truck)
                 } else {
                     shipment.nonFitPieces.push(item)
@@ -61,8 +53,6 @@ export async function POST(
 
     if (!!truck.items.length) // add remainder
         shipment.addTruck(truck)
-
-    console.log(shipment)
 
     return NextResponse.json( shipment, { status: 200 });
 }

@@ -292,7 +292,7 @@ export default function Home() {
                 {responseAttempted && shipment && (
                     shipment.trucks.map((truck: any, index: number) => {
                         return (<div className="my-3">
-                            <div className="font-bold">
+                            <div className="font-bold" key={index}>
                                 {`${truck.trailer.name} ${index + 1}`}
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
@@ -300,8 +300,8 @@ export default function Home() {
                                 {`${truck.areaUsed}(sq. in) / ${truck.trailer.area}`}
                             </div>
                             {
-                                truck.items.map((item: any) =>
-                                    <div>{`${item.name} - ${item.length}in/${item.width}in/${numberWithCommas(item.weight)}lbs`}</div>
+                                truck.items.map((item: any, index: number) =>
+                                    <div key={index}>{`${item.name} - ${item.length}in/${item.width}in/${numberWithCommas(item.weight)}lbs`}</div>
                                 )
                             }
                         </div>)
