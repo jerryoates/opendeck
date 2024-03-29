@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { numberWithCommas } from "@dims/utils/numbers";
 import Link from "next/link";
+import GridRow from "@dims/components/GridRow";
+import Header from "@dims/components/Header";
 
 interface ActiveFreight {
     name: string,
@@ -90,41 +92,7 @@ export default function Home() {
 
     return (
         <main className="min-h-screen flex-col items-center justify-between pt-10 p-20">
-            <header>
-                <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
-                    <li>
-                        <Link
-                            className="hover:text-blue-600"
-                            href="/about">
-                            About
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            className="hover:text-blue-600"
-                            href="/contact">
-                            Contact
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            className="hover:text-blue-600"
-                            href="/careers">
-                            Careers
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            className="hover:text-blue-600"
-                            href="/license">
-                            License
-                        </Link>
-                    </li>
-                    <li className="mx-1000">
-                        Sign In
-                    </li>
-                </ul>
-            </header>
+            <Header />
             <div className="z-10 max-w-5xl w-full tems-center justify-between font-mono text-sm mt-20">
                 <p className="fixed font-bold left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
                     Open Deck Dimension Calculator
@@ -137,34 +105,12 @@ export default function Home() {
                     <div>Height (in)</div>
                     <div>Weight (lbs)</div>
                 </div>
-                {/* <div className="relative flex items-center mt-0 mb-5">
-                    <div className="flex-grow border-t border-gray-400"></div>
-                    <div className="flex-grow border-t border-gray-400"></div>
-                </div> */}
                 <div className="grid grid-cols-7 gap-4 mb-5">
                     {
                         savedFreight.length > 0 && savedFreight.map((freight: ActiveFreight, index: number) => {
                             return (
                                 <>
-                                    <div
-                                        className="font-bold">
-                                        {`${freight.name}`}
-                                    </div>
-                                    <div>
-                                        {`${freight.quantity}`}
-                                    </div>
-                                    <div>
-                                        {`${freight.length} in`}
-                                    </div>
-                                    <div>
-                                        {`${freight.width} in`}
-                                    </div>
-                                    <div>
-                                        {`${freight.height} in`}
-                                    </div>
-                                    <div>
-                                        {`${freight.weight} lbs`}
-                                    </div>
+                                    <GridRow freight={freight} />
                                     <div>
                                         <button className="text-lg">
                                             ✎
@@ -293,7 +239,7 @@ export default function Home() {
                     shipment.trucks.map((truck: any, index: number) => {
                         return (<div className="my-3" key={index}>
                             <div className="font-bold">
-                                {`${truck.trailer.name} ${index + 1}`}
+                                {`${index + 1}. ${truck.trailer.name}`}
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
                                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -307,7 +253,7 @@ export default function Home() {
                         </div>)
                     })
                 )}
-                {responseAttempted && shipment.nonFitPieces && (
+                {responseAttempted && shipment.nonFitPieces.length > 0 && (
                     <div>
                         <div className="mt-3 font-bold">
                             Non Fits:
