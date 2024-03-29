@@ -291,8 +291,8 @@ export default function Home() {
             <div>
                 {responseAttempted && shipment && (
                     shipment.trucks.map((truck: any, index: number) => {
-                        return (<div className="my-3">
-                            <div className="font-bold" key={index}>
+                        return (<div className="my-3" key={index}>
+                            <div className="font-bold">
                                 {`${truck.trailer.name} ${index + 1}`}
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
@@ -313,7 +313,7 @@ export default function Home() {
                             Non Fits:
                         </div>
                         {shipment.nonFitPieces.map((item: any, index: number) =>
-                            <div>
+                            <div key={index}>
                                 {`${item.name}`}
                             </div>
                         )}
