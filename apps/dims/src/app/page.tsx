@@ -1,9 +1,10 @@
 "use client"
 import { useState } from "react";
 import { numberWithCommas } from "@dims/utils/numbers";
-import Link from "next/link";
-import GridRow from "@dims/components/GridRow";
+import GridRow from "@dims/components/FreightGrid/GridRow";
 import Header from "@dims/components/Header";
+import GridColumnHeaders from "@dims/components/FreightGrid/GridColumnHeaders";
+import InputRow from "@dims/components/FreightGrid/InputRow";
 
 interface ActiveFreight {
     name: string,
@@ -26,7 +27,6 @@ interface ResponseBody {
 export default function Home() {
     const [addFreightMenuOpen, setAddFreightMenuOpen] = useState(false)
     const [savedFreight, setSavedFreight] = useState<ActiveFreight[]>([])
-    const [isLoading, setIsLoading] = useState(false)
     const [responseAttempted, setResponseAttempted] = useState(false)
     const [calculatedResponse, setCalculatedResponse]: any = useState({})
     const [shipment, setShipment]: any = useState({})
@@ -58,7 +58,6 @@ export default function Home() {
     }
 
     async function onCalculate(savedItems: ActiveFreight[]) {
-        // setIsLoading(true)
         const response = await fetch('/api', {
             method: 'POST',
             body: JSON.stringify(savedItems),
@@ -97,14 +96,7 @@ export default function Home() {
                 <p className="fixed font-bold left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30 text-lg">
                     Open Deck Dimension Calculator
                 </p>
-                <div className="grid grid-cols-7 gap-4 mt-8 mb-8 font-bold text-md">
-                    <div>Name</div>
-                    <div>Quantity</div>
-                    <div>Length (in)</div>
-                    <div>Width (in)</div>
-                    <div>Height (in)</div>
-                    <div>Weight (lbs)</div>
-                </div>
+                <GridColumnHeaders />
                 <div className="grid grid-cols-7 gap-4 mb-5">
                     {
                         savedFreight.length > 0 && savedFreight.map((freight: ActiveFreight, index: number) => {
@@ -156,72 +148,16 @@ export default function Home() {
                             )
                         }
                     </div >
-                    /**
-                     * Truck 1 
-                     * - item 
-                     * - duplicate
-                     * - item
-                     * 
-                     * Truck 2
-                     * - same item
-                     * - same item
-                     */
-
                 ) : (
                     <div className="grid grid-cols-7 gap-4 mb-5">
-                        <input type="text" name="name" style={formStyle}
-                            className="text-black-900"
-                            value={activeFreight.name}
-                            onChange={event => setActiveFreight({ ...activeFreight, name: event.target.value })}
+                        <InputRow
+                            activeFreight={activeFreight}
+                            setActiveFreight={setActiveFreight}
+                            addFreightMenuOpen={addFreightMenuOpen}
+                            saveFreight={saveFreight}
+                            clearActiveFreight={clearActiveFreight}
+                            setAddFreightMenuOpen={setAddFreightMenuOpen}
                         />
-                        <input type="number" name="quantity" style={formStyle}
-                            value={activeFreight.quantity || ''}
-                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            onChange={event => setActiveFreight({ ...activeFreight, quantity: Number(event.target.value) })}
-                        />
-                        <input type="number" name="length" style={formStyle}
-                            value={activeFreight.length || ''}
-                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            onChange={event => setActiveFreight({ ...activeFreight, length: Number(event.target.value) })}
-                        />
-                        <input type="number" name="width" style={formStyle}
-                            value={activeFreight.width || ''}
-                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            onChange={event => setActiveFreight({ ...activeFreight, width: Number(event.target.value) })}
-                        />
-                        <input type="number" name="height" style={formStyle}
-                            value={activeFreight.height || ''}
-                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            onChange={event => setActiveFreight({ ...activeFreight, height: Number(event.target.value) })}
-                        />
-                        <input type="number" name="weight" style={formStyle}
-                            value={activeFreight.weight || ''}
-                            className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            onChange={event => setActiveFreight({ ...activeFreight, weight: Number(event.target.value) })}
-                        />
-                        {
-                            addFreightMenuOpen &&
-                                activeFreight.name &&
-                                activeFreight.height &&
-                                activeFreight.length &&
-                                activeFreight.width &&
-                                activeFreight.quantity &&
-                                activeFreight.weight ? (
-                                <button
-                                    style={saveStyle}
-                                    onClick={activeFreight.name ? saveFreight : () => window.alert('At least add a name')}
-                                > Add +
-                                </button>
-                            ) :
-                                <button
-                                    onClick={() => {
-                                        setAddFreightMenuOpen(false)
-                                        clearActiveFreight()
-                                    }}
-                                    style={cancelStyle}>
-                                    ❌
-                                </button>
-                        }
                     </div>
                 )}
             </div>
