@@ -8,6 +8,7 @@ import InputRow from "@dims/components/FreightGrid/InputRow";
 import GridFooter from "@dims/components/FreightGrid/GridFooter";
 import OutputBar from "@dims/components/OutputBar";
 import TitleBar from "@dims/components/TitleBar";
+import Truck from "@dims/components/Results/Truck";
 
 interface ActiveFreight {
     name: string,
@@ -135,22 +136,7 @@ export default function Home() {
             <div>
                 {responseAttempted && shipment && (
                     shipment.trucks.map((truck: any, index: number) => {
-                        return (
-                            <div className="my-3" key={index}>
-                                <div className="font-bold">
-                                    {`${index + 1}. ${truck.trailer.name}`}
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    {`${truck.areaUsed}(sq. in) / ${truck.trailer.area}`}
-                                </div>
-                                {
-                                    truck.items.map((item: any, index: number) =>
-                                        <div key={index}>{`${item.name} - ${item.length}in/${item.width}in/${numberWithCommas(item.weight)}lbs`}</div>
-                                    )
-                                }
-                            </div>)
-
+                        <Truck truck={truck} index={index} />
                     })
                 )}
                 {responseAttempted && shipment.nonFitPieces.length > 0 && (
