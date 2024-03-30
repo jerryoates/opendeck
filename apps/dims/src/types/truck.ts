@@ -16,10 +16,14 @@ export default class Truck {
     canFitItem(item: any) {
         if (item.weight + this.currentCapacity > this.trailer.carryingCapacity)
             return false
-        else if (item.length > this.trailer.length && item.width > this.trailer.length) // too long or wide in one dimension
+        else if (item.length > this.trailer.length && item.width > this.trailer.length) {
+            console.log('this one')
             return false
-        else if (item.length > this.trailer.width && item.length > this.trailer.width) // too long or wide in one dimension
+        }
+        else if (item.length > this.trailer.width && item.width > this.trailer.width) {
+            console.log('no this one')
             return false
+        }
         else if ((item.length * item.width) > this.trailer.area - this.areaUsed)
             return false
         else if (item.height > this.trailer.height)

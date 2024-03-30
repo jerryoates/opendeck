@@ -1,6 +1,5 @@
 "use client"
 import { useState } from "react";
-import { numberWithCommas } from "@dims/utils/numbers";
 import GridRow from "@dims/components/FreightGrid/GridRow";
 import Header from "@dims/components/Header";
 import GridColumnHeaders from "@dims/components/FreightGrid/GridColumnHeaders";
@@ -88,7 +87,7 @@ export default function Home() {
                 <GridColumnHeaders />
                 <div className="grid grid-cols-7 gap-4 mb-5">
                     {
-                        savedFreight.length && savedFreight.map((freight: ActiveFreight, index: number) => {
+                        savedFreight.length > 0 && savedFreight.map((freight: ActiveFreight, index: number) => {
                             return (
                                 <>
                                     <GridRow freight={freight} />
@@ -134,23 +133,48 @@ export default function Home() {
             )
             }
             <div>
-                {responseAttempted && shipment && (
-                    shipment.trucks.map((truck: any, index: number) => {
-                        <Truck truck={truck} index={index} />
-                    })
-                )}
-                {responseAttempted && shipment.nonFitPieces.length > 0 && (
-                    <div>
-                        <div className="mt-3 font-bold">
-                            Non Fits:
-                        </div>
-                        {shipment.nonFitPieces.map((item: any, index: number) =>
-                            <div key={index}>
-                                {`${item.name}`}
+                {
+                    shipment && (
+                        shipment.trucks?.map((truck: any, index: number) =>
+                            <Truck truck={truck} index={index} />
+                        )
+                    )
+                }
+                {
+                    shipment.nonFitPieces?.length > 0 && (
+                        <div>
+                            <div className="mt-3 font-bold">
+                                Non Fits:
                             </div>
-                        )}
-                    </div>
-                )}
+                            {shipment.nonFitPieces.map((item: any, index: number) =>
+                                <div key={index}>
+                                    {`${item.name}`}
+                                </div>
+                            )}
+                        </div>
+                    )
+                }
+                {
+                    shipment && responseAttempted && (
+                        <>
+                            <button
+                                className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
+                                onClick={() => { navigator.clipboard.writeText(JSON.stringify(shipment)) }}
+                            >
+                                Copy &nbsp;&nbsp; 📋
+                            </button>
+                            <button
+                                className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
+                                onClick={() => {
+                                    setResponseAttempted(false)
+                                    setCalculatedResponse({})
+                                }}
+                            >
+                                Clear &nbsp;&nbsp; ❌
+                            </button>
+                        </>
+                    )
+                }
                 {
                     // responseAttempted && calculatedResponse && (
                     //     <div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
