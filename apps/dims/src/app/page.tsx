@@ -136,7 +136,7 @@ export default function Home() {
                 {
                     shipment && (
                         shipment.trucks?.map((truck: any, index: number) =>
-                            <Truck truck={truck} index={index} />
+                            <Truck truck={truck} index={index} key={index} />
                         )
                     )
                 }
