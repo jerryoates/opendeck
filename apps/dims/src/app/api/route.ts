@@ -27,32 +27,24 @@ export async function POST(
     const data = await req.json()
 
     const shipment = new Shipment()
-    let truck = new Truck()
+    let truck = new Truck() // TODO: this too
 
-    for (const item of data) {
-        // if totals.weight + item.weight > trailer.capacity ---- CHECK ALL TRAILER TYPES - is more trucks better?
+    const enumerated: any = []
     
+    data.forEach((item: any)  => { // TODO: remove this
         for (let i = 0; i < item.quantity; i++) {
-            if (truck.canFitItem(item)) {
-                truck.addItem(item)
-            } else {
-                console.log('doesnt fit: ', item.name)
-                // see if upgrade truck, and if fits after upgrade
-                truck = new Truck()
-                if (truck.canFitItem(item)) {
-                    truck.addItem(item)
-
-                    console.log('adding item and truck in here: ', truck)
-                    shipment.addTruck(truck)
-                } else {
-                    shipment.nonFitPieces.push(item)
-                }
-            }
+            enumerated.push(item)
         }
+    })
+
+    for (const item of enumerated) {
+        shipment.checkTrucks(item)
     }
 
-    if (!!truck.items.length) // add remainder
+    if (!!truck.items.length) // double check this is needed
         shipment.addTruck(truck)
+
+    shipment.checkEmptyTrucks()
 
     return NextResponse.json( shipment, { status: 200 });
 }

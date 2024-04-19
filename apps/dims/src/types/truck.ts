@@ -17,11 +17,9 @@ export default class Truck {
         if (item.weight + this.currentCapacity > this.trailer.carryingCapacity)
             return false
         else if (item.length > this.trailer.length && item.width > this.trailer.length) {
-            console.log('this one')
             return false
         }
         else if (item.length > this.trailer.width && item.width > this.trailer.width) {
-            console.log('no this one')
             return false
         }
         else if ((item.length * item.width) > this.trailer.area - this.areaUsed)

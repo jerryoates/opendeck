@@ -31,7 +31,6 @@ export default function Home() {
     const [addFreightMenuOpen, setAddFreightMenuOpen] = useState(false)
     const [savedFreight, setSavedFreight] = useState<ActiveFreight[]>([])
     const [responseAttempted, setResponseAttempted] = useState(false)
-    const [calculatedResponse, setCalculatedResponse]: any = useState({})
     const [shipment, setShipment]: any = useState({})
 
     const [activeFreight, setActiveFreight] = useState<ActiveFreight>({
@@ -66,12 +65,10 @@ export default function Home() {
             body: JSON.stringify(savedItems),
         })
 
-        const data = await response.json() as ResponseBody
+        const data: ResponseBody = await response.json()
 
-
-        setCalculatedResponse(data as ResponseBody)
-        setShipment(data)
         setResponseAttempted(true)
+        setShipment(data)
     }
 
     const deleteButtonStyle = {
@@ -128,11 +125,11 @@ export default function Home() {
                     />
                 )}
             </div>
-            {responseAttempted && calculatedResponse && (
+            {responseAttempted && shipment && (
                 <OutputBar />
             )
             }
-            <div>
+            {responseAttempted && (<div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
                 {
                     shipment && (
                         shipment.trucks?.map((truck: any, index: number) =>
@@ -155,7 +152,7 @@ export default function Home() {
                     )
                 }
                 {
-                    shipment && responseAttempted && (
+                    shipment && (
                         <>
                             <button
                                 className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
@@ -167,7 +164,7 @@ export default function Home() {
                                 className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
                                 onClick={() => {
                                     setResponseAttempted(false)
-                                    setCalculatedResponse({})
+                                    setShipment({})
                                 }}
                             >
                                 Clear &nbsp;&nbsp; ❌
@@ -244,6 +241,6 @@ export default function Home() {
                     //     </div>
                     // )
                 }
-            </div>
+            </div>)}
         </main >)
 }

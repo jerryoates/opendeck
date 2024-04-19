@@ -4,7 +4,7 @@ export default function Truck({ truck, index }: any) {
     return (
         <div key={index} className="my-3">
             <div className="font-bold">
-                {`${index + 1}. ${truck.trailer.name}`}
+                {`${index + 1}. ${truck.trailer.name} - ${truck.items.length} items -`}
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
                 &nbsp;&nbsp;&nbsp;&nbsp;

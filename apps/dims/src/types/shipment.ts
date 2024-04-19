@@ -14,4 +14,25 @@ export default class Shipment {
     addTruck(truck: Truck) {
         this.trucks.push(truck)
     }
+
+    checkTrucks(item: any) {
+        for (const truck of this.trucks) { // check every truck for fit before creating one
+            if (truck.canFitItem(item)) {
+                truck.addItem(item)
+                return
+            }
+        }
+
+        let possibleNewTruck = new Truck()
+        if (possibleNewTruck.canFitItem(item)) {
+            possibleNewTruck.addItem(item)
+            this.addTruck(possibleNewTruck)
+        } else {
+            this.nonFitPieces.push(item)
+        }
+    }
+
+    checkEmptyTrucks() {
+        this.trucks.filter(truck => truck.items.length > 0)
+    }
 }
