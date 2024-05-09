@@ -140,7 +140,7 @@ export default function Home() {
                             setAddFreightMenuOpen={setAddFreightMenuOpen}
                         />
                     ) : pasteOpen ? (
-                        <PasteInput savedFreight={savedFreight} setSavedFreight={setSavedFreight} />
+                        <PasteInput setSavedFreight={setSavedFreight} setPasteOpen={setPasteOpen} />
                     ) :
                         (
                             <GridFooter
@@ -202,75 +202,6 @@ export default function Home() {
                                 </button>
                             </>
                         )
-                    }
-                    {
-                        // responseAttempted && calculatedResponse && (
-                        //     <div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-                        //         {calculatedResponse.nonFitPieces?.length > 0 && (
-                        //             <div>
-                        //                 < h2 className="font-bold text-lg mt-3" >
-                        //                     Some of your pieces don&apos;t fit on a 48&apos; flatbed:
-                        //                 </h2 >
-                        //                 {calculatedResponse.nonFitPieces.map((piece: any) =>
-                        //                     <>
-                        //                         <div className="my-2"> {`${piece.item.quantity}x ${(piece.item.name)} - ${(piece.reason)}`}</div>
-                        //                     </>
-                        //                 )}
-                        //                 <div className="relative flex py-5 items-center mt-15">
-                        //                     <div className="flex-grow border-t border-gray-400"></div>
-                        //                     <div className="flex-grow border-t border-gray-400"></div>
-                        //                 </div>
-                        //             </div>
-                        //         )}
-                        //         <h1 className="flex text-lg row-auto mt-0 font-bold">
-                        //             <div>
-                        //                 {calculatedResponse.nonFitPieces.length > 0 ? `For fitting pieces, you need:` : `You need:`}
-                        //             </div>
-                        //         </h1>
-                        //         <h2 className="text-md mt-2">
-                        //             {`${calculatedResponse.calculation.number} 48' Flatbed${calculatedResponse.calculation.number.length > 0 ? 's' : ''}`}
-                        //         </h2>
-                        //         <br />
-                        //         <h1 className="text-lg font-bold">
-                        //             Load Requirements:
-                        //         </h1>
-                        //         <div className="grid grid-cols-2 gap-0 mb-2">
-                        //             <div className="font-bold">
-                        //                 Weight:
-                        //             </div>
-                        //             <div>
-                        //                 {`${numberWithCommas(calculatedResponse.loadInput.weight)} lbs`}
-                        //             </div>
-                        //             <div className="font-bold">
-                        //                 Area:
-                        //             </div>
-                        //             <div>
-                        //                 {`${numberWithCommas(calculatedResponse.loadInput.area)} sq in`}
-                        //             </div>
-                        //             <div className="font-bold">
-                        //                 Tallest Item:
-                        //             </div>
-                        //             <div>
-                        //                 {`${numberWithCommas(calculatedResponse.calculation.height)} in`}
-                        //             </div>
-                        //         </div>
-                        //         <button
-                        //             className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
-                        //             onClick={() => { navigator.clipboard.writeText(JSON.stringify(calculatedResponse)) }}
-                        //         >
-                        //             Copy &nbsp;&nbsp; 📋
-                        //         </button>
-                        //         <button
-                        //             className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
-                        //             onClick={() => {
-                        //                 setResponseAttempted(false)
-                        //                 setCalculatedResponse({})
-                        //             }}
-                        //         >
-                        //             Clear &nbsp;&nbsp; ❌
-                        //         </button>
-                        //     </div>
-                        // )
                     }
                 </div>)
             }

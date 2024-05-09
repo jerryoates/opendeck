@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export default function PasteInput({ savedFreight, setSavedFreight }: any) {
+export default function PasteInput({ setSavedFreight, setPasteOpen }: any) {
     const [value, setValue] = useState('')
     return (
         <>
@@ -11,7 +11,10 @@ export default function PasteInput({ savedFreight, setSavedFreight }: any) {
             </textarea>
             <button
                 className="mx-5"
-                onClick={() => { setSavedFreight(JSON.parse(value)) }}
+                onClick={() => {
+                    setSavedFreight(JSON.parse(value))
+                    setPasteOpen(false)
+                }}
             >
                 Save
             </button>
