@@ -13,9 +13,13 @@ export default class Shipment {
 
     addTruck(truck: Truck) {
         this.trucks.push(truck)
+
+        // maybe sort them here
     }
 
     checkTrucks(item: any) {
+        // might need to sort trucks by area first
+
         for (const truck of this.trucks) { // check every truck for fit before creating one
             if (truck.canFitItem(item)) {
                 truck.addItem(item)

@@ -8,6 +8,8 @@ import GridFooter from "@dims/components/FreightGrid/GridFooter";
 import OutputBar from "@dims/components/OutputBar";
 import TitleBar from "@dims/components/TitleBar";
 import Truck from "@dims/components/Results/Truck";
+import InLineInputRow from "@dims/components/FreightGrid/InLineInputRow";
+import PasteInput from "@dims/components/FreightGrid/PasteInput";
 
 interface ActiveFreight {
     name: string,
@@ -32,6 +34,8 @@ export default function Home() {
     const [savedFreight, setSavedFreight] = useState<ActiveFreight[]>([])
     const [responseAttempted, setResponseAttempted] = useState(false)
     const [shipment, setShipment]: any = useState({})
+    const [editItemIsOpen, setEditItemIsOpen] = useState(false)
+    const [pasteOpen, setPasteOpen] = useState(false)
 
     const [activeFreight, setActiveFreight] = useState<ActiveFreight>({
         name: '',
@@ -81,166 +85,194 @@ export default function Home() {
             <Header />
             <div className="z-10 max-w-5xl w-full tems-center justify-between font-mono text-sm mt-20">
                 <TitleBar />
-                <GridColumnHeaders />
+                <GridColumnHeaders savedFreight={savedFreight} />
                 <div className="grid grid-cols-7 gap-4 mb-5">
                     {
                         savedFreight.length > 0 && savedFreight.map((freight: ActiveFreight, index: number) => {
-                            return (
-                                <>
-                                    <GridRow freight={freight} />
-                                    <div>
-                                        <button className="text-lg">
-                                            ✎
-                                        </button>
-                                        <button
-                                            style={deleteButtonStyle}
-                                            onClick={() => {
-                                                const previousFreight = [...savedFreight]
-                                                const newFreight = previousFreight.filter(item => item.name !== freight.name)
-                                                setSavedFreight(newFreight)
-                                            }}
-                                        > 🗑️ </button>
-                                    </div>
-                                </>
+                            return editItemIsOpen ?
+                                (
+                                    <>
+                                        <InLineInputRow
+                                            workingItem={{ ...freight, index }}
+                                            freight={freight}
+                                            index={index}
+                                            setActiveFreight={setActiveFreight}
+                                            addFreightMenuOpen={addFreightMenuOpen}
+                                            saveFreight={saveFreight}
+                                            clearActiveFreight={clearActiveFreight}
+                                            setAddFreightMenuOpen={setAddFreightMenuOpen}
+                                        />
+                                    </>
+                                )
+                                : (
+                                    <>
+                                        <GridRow freight={freight} />
+                                        < div >
+                                            <button
+                                                className="text-lg"
+                                                onClick={() => { setEditItemIsOpen(!editItemIsOpen) }}
+                                            >
+                                                ✎
+                                            </button>
+                                            <button
+                                                style={deleteButtonStyle}
+                                                onClick={() => {
+                                                    const previousFreight = [...savedFreight]
+                                                    const newFreight = previousFreight.filter(item => item.name !== freight.name)
+                                                    setSavedFreight(newFreight)
+                                                }}
+                                            > 🗑️ </button>
+                                        </div>
+                                    </>
 
-                            )
+                                )
                         })
                     }
                 </div>
-                {addFreightMenuOpen ? (
-                    <InputRow
-                        activeFreight={activeFreight}
-                        setActiveFreight={setActiveFreight}
-                        addFreightMenuOpen={addFreightMenuOpen}
-                        saveFreight={saveFreight}
-                        clearActiveFreight={clearActiveFreight}
-                        setAddFreightMenuOpen={setAddFreightMenuOpen}
-                    />
-                ) : (
-                    <GridFooter
-                        setAddFreightMenuOpen={setAddFreightMenuOpen}
-                        addFreightMenuOpen={addFreightMenuOpen}
-                        onCalculate={onCalculate}
-                        savedFreight={savedFreight}
-                    />
-                )}
-            </div>
-            {responseAttempted && shipment && (
-                <OutputBar />
-            )
-            }
-            {responseAttempted && (<div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
                 {
-                    shipment && (
-                        shipment.trucks?.map((truck: any, index: number) =>
-                            <Truck truck={truck} index={index} key={index} />
+                    addFreightMenuOpen ? (
+                        <InputRow
+                            activeFreight={activeFreight}
+                            setActiveFreight={setActiveFreight}
+                            addFreightMenuOpen={addFreightMenuOpen}
+                            saveFreight={saveFreight}
+                            clearActiveFreight={clearActiveFreight}
+                            setAddFreightMenuOpen={setAddFreightMenuOpen}
+                        />
+                    ) : pasteOpen ? (
+                        <PasteInput savedFreight={savedFreight} setSavedFreight={setSavedFreight} />
+                    ) :
+                        (
+                            <GridFooter
+                                setAddFreightMenuOpen={setAddFreightMenuOpen}
+                                addFreightMenuOpen={addFreightMenuOpen}
+                                onCalculate={onCalculate}
+                                savedFreight={savedFreight}
+                                pasteOpen={pasteOpen}
+                                setPasteOpen={setPasteOpen}
+                            />
                         )
-                    )
                 }
-                {
-                    shipment.nonFitPieces?.length > 0 && (
-                        <div>
-                            <div className="mt-3 font-bold">
-                                Non Fits:
-                            </div>
-                            {shipment.nonFitPieces.map((item: any, index: number) =>
-                                <div key={index}>
-                                    {`${item.name}`}
+            </div >
+            {
+                responseAttempted && shipment && (
+                    <OutputBar />
+                )
+            }
+            {
+                responseAttempted && (<div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+                    {
+                        shipment && (
+                            shipment.trucks?.map((truck: any, index: number) =>
+                                <Truck truck={truck} index={index} key={index} />
+                            )
+                        )
+                    }
+                    {
+                        shipment.nonFitPieces?.length > 0 && (
+                            <div>
+                                <div className="mt-3 font-bold">
+                                    Non Fits:
                                 </div>
-                            )}
-                        </div>
-                    )
-                }
-                {
-                    shipment && (
-                        <>
-                            <button
-                                className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
-                                onClick={() => { navigator.clipboard.writeText(JSON.stringify(shipment)) }}
-                            >
-                                Copy &nbsp;&nbsp; 📋
-                            </button>
-                            <button
-                                className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
-                                onClick={() => {
-                                    setResponseAttempted(false)
-                                    setShipment({})
-                                }}
-                            >
-                                Clear &nbsp;&nbsp; ❌
-                            </button>
-                        </>
-                    )
-                }
-                {
-                    // responseAttempted && calculatedResponse && (
-                    //     <div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-                    //         {calculatedResponse.nonFitPieces?.length > 0 && (
-                    //             <div>
-                    //                 < h2 className="font-bold text-lg mt-3" >
-                    //                     Some of your pieces don&apos;t fit on a 48&apos; flatbed:
-                    //                 </h2 >
-                    //                 {calculatedResponse.nonFitPieces.map((piece: any) =>
-                    //                     <>
-                    //                         <div className="my-2"> {`${piece.item.quantity}x ${(piece.item.name)} - ${(piece.reason)}`}</div>
-                    //                     </>
-                    //                 )}
-                    //                 <div className="relative flex py-5 items-center mt-15">
-                    //                     <div className="flex-grow border-t border-gray-400"></div>
-                    //                     <div className="flex-grow border-t border-gray-400"></div>
-                    //                 </div>
-                    //             </div>
-                    //         )}
-                    //         <h1 className="flex text-lg row-auto mt-0 font-bold">
-                    //             <div>
-                    //                 {calculatedResponse.nonFitPieces.length > 0 ? `For fitting pieces, you need:` : `You need:`}
-                    //             </div>
-                    //         </h1>
-                    //         <h2 className="text-md mt-2">
-                    //             {`${calculatedResponse.calculation.number} 48' Flatbed${calculatedResponse.calculation.number.length > 0 ? 's' : ''}`}
-                    //         </h2>
-                    //         <br />
-                    //         <h1 className="text-lg font-bold">
-                    //             Load Requirements:
-                    //         </h1>
-                    //         <div className="grid grid-cols-2 gap-0 mb-2">
-                    //             <div className="font-bold">
-                    //                 Weight:
-                    //             </div>
-                    //             <div>
-                    //                 {`${numberWithCommas(calculatedResponse.loadInput.weight)} lbs`}
-                    //             </div>
-                    //             <div className="font-bold">
-                    //                 Area:
-                    //             </div>
-                    //             <div>
-                    //                 {`${numberWithCommas(calculatedResponse.loadInput.area)} sq in`}
-                    //             </div>
-                    //             <div className="font-bold">
-                    //                 Tallest Item:
-                    //             </div>
-                    //             <div>
-                    //                 {`${numberWithCommas(calculatedResponse.calculation.height)} in`}
-                    //             </div>
-                    //         </div>
-                    //         <button
-                    //             className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
-                    //             onClick={() => { navigator.clipboard.writeText(JSON.stringify(calculatedResponse)) }}
-                    //         >
-                    //             Copy &nbsp;&nbsp; 📋
-                    //         </button>
-                    //         <button
-                    //             className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
-                    //             onClick={() => {
-                    //                 setResponseAttempted(false)
-                    //                 setCalculatedResponse({})
-                    //             }}
-                    //         >
-                    //             Clear &nbsp;&nbsp; ❌
-                    //         </button>
-                    //     </div>
-                    // )
-                }
-            </div>)}
+                                {shipment.nonFitPieces.map((item: any, index: number) =>
+                                    <div key={index}>
+                                        {`${item.name}`}
+                                    </div>
+                                )}
+                            </div>
+                        )
+                    }
+                    {
+                        shipment && (
+                            <>
+                                <button
+                                    className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
+                                    onClick={() => { navigator.clipboard.writeText(JSON.stringify(shipment)) }}
+                                >
+                                    Copy &nbsp;&nbsp; 📋
+                                </button>
+                                <button
+                                    className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
+                                    onClick={() => {
+                                        setResponseAttempted(false)
+                                        setShipment({})
+                                    }}
+                                >
+                                    Clear &nbsp;&nbsp; ❌
+                                </button>
+                            </>
+                        )
+                    }
+                    {
+                        // responseAttempted && calculatedResponse && (
+                        //     <div className="w-[90%] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+                        //         {calculatedResponse.nonFitPieces?.length > 0 && (
+                        //             <div>
+                        //                 < h2 className="font-bold text-lg mt-3" >
+                        //                     Some of your pieces don&apos;t fit on a 48&apos; flatbed:
+                        //                 </h2 >
+                        //                 {calculatedResponse.nonFitPieces.map((piece: any) =>
+                        //                     <>
+                        //                         <div className="my-2"> {`${piece.item.quantity}x ${(piece.item.name)} - ${(piece.reason)}`}</div>
+                        //                     </>
+                        //                 )}
+                        //                 <div className="relative flex py-5 items-center mt-15">
+                        //                     <div className="flex-grow border-t border-gray-400"></div>
+                        //                     <div className="flex-grow border-t border-gray-400"></div>
+                        //                 </div>
+                        //             </div>
+                        //         )}
+                        //         <h1 className="flex text-lg row-auto mt-0 font-bold">
+                        //             <div>
+                        //                 {calculatedResponse.nonFitPieces.length > 0 ? `For fitting pieces, you need:` : `You need:`}
+                        //             </div>
+                        //         </h1>
+                        //         <h2 className="text-md mt-2">
+                        //             {`${calculatedResponse.calculation.number} 48' Flatbed${calculatedResponse.calculation.number.length > 0 ? 's' : ''}`}
+                        //         </h2>
+                        //         <br />
+                        //         <h1 className="text-lg font-bold">
+                        //             Load Requirements:
+                        //         </h1>
+                        //         <div className="grid grid-cols-2 gap-0 mb-2">
+                        //             <div className="font-bold">
+                        //                 Weight:
+                        //             </div>
+                        //             <div>
+                        //                 {`${numberWithCommas(calculatedResponse.loadInput.weight)} lbs`}
+                        //             </div>
+                        //             <div className="font-bold">
+                        //                 Area:
+                        //             </div>
+                        //             <div>
+                        //                 {`${numberWithCommas(calculatedResponse.loadInput.area)} sq in`}
+                        //             </div>
+                        //             <div className="font-bold">
+                        //                 Tallest Item:
+                        //             </div>
+                        //             <div>
+                        //                 {`${numberWithCommas(calculatedResponse.calculation.height)} in`}
+                        //             </div>
+                        //         </div>
+                        //         <button
+                        //             className="flex my-5 flex-row justify-end border-grey-300 bg-gradient-to-b from-green-200 backdrop-blur-2xl dark:border-green-800 dark:bg-green-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-green-200 lg:p-4 lg:dark:bg-green-800/30"
+                        //             onClick={() => { navigator.clipboard.writeText(JSON.stringify(calculatedResponse)) }}
+                        //         >
+                        //             Copy &nbsp;&nbsp; 📋
+                        //         </button>
+                        //         <button
+                        //             className="flex flex-row justify-end border-grey-300 bg-gradient-to-b from-red-200 backdrop-blur-2xl dark:border-red-800 dark:bg-red-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-red-200 lg:p-4 lg:dark:bg-red-800/30"
+                        //             onClick={() => {
+                        //                 setResponseAttempted(false)
+                        //                 setCalculatedResponse({})
+                        //             }}
+                        //         >
+                        //             Clear &nbsp;&nbsp; ❌
+                        //         </button>
+                        //     </div>
+                        // )
+                    }
+                </div>)
+            }
         </main >)
 }

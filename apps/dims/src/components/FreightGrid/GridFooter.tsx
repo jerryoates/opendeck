@@ -1,4 +1,7 @@
-export default function GridFooter({ setAddFreightMenuOpen, addFreightMenuOpen, onCalculate, savedFreight }: any) {
+
+
+export default function GridFooter({ setAddFreightMenuOpen, addFreightMenuOpen, pasteOpen, setPasteOpen, onCalculate, savedFreight }: any) {
+
     return (
         <div className="grid grid-cols-7 gap-4 my-10">
             <button
@@ -8,7 +11,14 @@ export default function GridFooter({ setAddFreightMenuOpen, addFreightMenuOpen, 
             >
                 +
             </button>
-            <div />
+            <button
+                className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30"
+                onClick={() => setPasteOpen(!pasteOpen)}
+                style={{ fontSize: 15 }}
+            >
+                Paste 📋
+            </button>
+            {/* <div /> */}
             <div />
             <div />
             <div />
