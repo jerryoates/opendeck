@@ -37,6 +37,20 @@ export async function POST(
         }
     })
 
+    enumerated.sort((a: any, b: any) => {
+        const areaA = a.length * a.width
+        const areaB = b.length * b.width
+        if (areaA < areaB) {
+            return -1;
+        }
+        if (areaA > areaB) {
+            return 1;
+        }
+
+        // names must be equal
+        return 0;
+    });
+
     for (const item of enumerated) {
         shipment.checkTrucks(item)
     }
