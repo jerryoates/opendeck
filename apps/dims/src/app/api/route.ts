@@ -41,10 +41,10 @@ export async function POST(
         const areaA = a.length * a.width
         const areaB = b.length * b.width
         if (areaA < areaB) {
-            return -1;
+            return 1;
         }
         if (areaA > areaB) {
-            return 1;
+            return -1;
         }
 
         // names must be equal
