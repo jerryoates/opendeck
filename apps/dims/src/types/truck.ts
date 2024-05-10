@@ -5,6 +5,8 @@ export default class Truck {
         this.trailer = flatbed48,
         this.currentCapacity = 0,
         this.areaUsed = 0
+        this.lengthUsed = 0
+        this.widthUsed = 0
         this.items = []
     }
 
@@ -12,6 +14,8 @@ export default class Truck {
     trailer: Trailer = flatbed48 // start with smallest
     currentCapacity: number
     areaUsed: number
+    lengthUsed: number
+    widthUsed: number
 
     canFitItem(item: any) {
         if (item.weight + this.currentCapacity > this.trailer.carryingCapacity)
@@ -26,6 +30,18 @@ export default class Truck {
             return false
         else if (item.height > this.trailer.height)
             return false
+        // check current dimentions
+       
+        // too long and cant be rotated
+        else if (item.length > (this.trailer.length - this.lengthUsed) && item.length > (this.trailer.width - this.widthUsed)) {
+            console.log('in first NEW one: ', item.name)
+            return false
+        }
+        // too wide and cant be rotated
+        else if (item.width > (this.trailer.width - this.widthUsed) && item.width > (this.trailer.length - this.lengthUsed)) {
+            console.log('in second one: ', item.name)
+            return false
+        }
         else
             return true
     }
@@ -41,13 +57,10 @@ export default class Truck {
     }
 
     addItem(item: any) {
-        if (this.canFitItem(item)) {
-            this.currentCapacity += item.weight
-            this.areaUsed += item.length * item.width
-            this.items.push(item)
-
-        } else {
-            throw new Error ('Item Does Not Fit', item) 
-        }
+        this.currentCapacity += item.weight
+        this.areaUsed += item.length * item.width
+        this.lengthUsed += item.length
+        this.widthUsed += item.width
+        this.items.push(item)
     }
 }

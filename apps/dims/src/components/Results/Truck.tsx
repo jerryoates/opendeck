@@ -8,7 +8,11 @@ export default function Truck({ truck, index }: any) {
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 {`${numberWithCommas(truck.currentCapacity)}lbs / ${numberWithCommas(truck.trailer.carryingCapacity)}lbs`}
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                {`${truck.areaUsed}(sq. in) / ${truck.trailer.area}`}
+                {`${truck.areaUsed} / ${truck.trailer.area}(sq. in)`}
+                {/* &nbsp;&nbsp;&nbsp;&nbsp;
+                {`Length - ${truck.lengthUsed} / ${truck.trailer.length}(in)`}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                {`Width - ${truck.widthUsed} / ${truck.trailer.width}(in)`} */}
             </div>
             {
                 truck.items.map((item: any, index: number) =>

@@ -47,7 +47,6 @@ export async function POST(
             return -1;
         }
 
-        // names must be equal
         return 0;
     });
 
