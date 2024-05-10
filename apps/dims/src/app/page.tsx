@@ -8,7 +8,7 @@ import GridFooter from "@dims/components/FreightGrid/GridFooter";
 import OutputBar from "@dims/components/OutputBar";
 import TitleBar from "@dims/components/TitleBar";
 import Truck from "@dims/components/Results/Truck";
-import InLineInputRow from "@dims/components/FreightGrid/InLineInputRow";
+import EditRow from "@dims/components/FreightGrid/EditRow";
 import PasteInput from "@dims/components/FreightGrid/PasteInput";
 
 interface ActiveFreight {
@@ -92,15 +92,13 @@ export default function Home() {
                             return editItemIsOpen ?
                                 (
                                     <>
-                                        <InLineInputRow
+                                        <EditRow
                                             workingItem={{ ...freight, index }}
                                             freight={freight}
                                             index={index}
-                                            setActiveFreight={setActiveFreight}
-                                            addFreightMenuOpen={addFreightMenuOpen}
-                                            saveFreight={saveFreight}
-                                            clearActiveFreight={clearActiveFreight}
-                                            setAddFreightMenuOpen={setAddFreightMenuOpen}
+                                            setSavedFreight={setSavedFreight}
+                                            savedFreight={savedFreight}
+                                            setEditItemIsOpen={setEditItemIsOpen}
                                         />
                                     </>
                                 )
