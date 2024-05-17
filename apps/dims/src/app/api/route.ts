@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { Trailer } from '@dims/types/trailer';
 import Truck from '@dims/types/truck';
 import Shipment from '@dims/types/shipment';
+import { Item } from '@dims/types/item';
 
 type Flatbed48 = Trailer
 
@@ -27,37 +28,39 @@ export async function POST(
     const data = await req.json()
 
     const shipment = new Shipment()
-    let truck = new Truck() // TODO: this too
 
-    const enumerated: any = []
-    
+    const enumerated: Item[] = []
     data.forEach((item: any)  => { // TODO: remove this
         for (let i = 0; i < item.quantity; i++) {
             enumerated.push(item)
         }
     })
 
-    enumerated.sort((a: any, b: any) => {
-        const areaA = a.length * a.width
-        const areaB = b.length * b.width
-        if (areaA < areaB) {
-            return 1;
-        }
-        if (areaA > areaB) {
-            return -1;
-        }
+    // enumerated.sort((a: any, b: any) => {
+    //     const areaA = a.length * a.width
+    //     const areaB = b.length * b.width
+    //     if (areaA < areaB) {
+    //         return 1;
+    //     }
+    //     if (areaA > areaB) {
+    //         return -1;
+    //     }
 
-        return 0;
-    });
+    //     return 0;
+    // });
 
-    for (const item of enumerated) {
-        shipment.checkTrucks(item)
-    }
+    shipment.packItems(enumerated)
 
-    if (!!truck.items.length) // double check this is needed
-        shipment.addTruck(truck)
+    // for (const item of enumerated) {
+    //     shipment.checkTrucks(item)
+    // }
+
+    // if (!!truck.items.length) // double check this is needed
+    //     shipment.addTruck(truck)
 
     shipment.checkEmptyTrucks()
+
+    console.log(shipment.trucks[0].items)
 
     return NextResponse.json( shipment, { status: 200 });
 }

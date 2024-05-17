@@ -15,8 +15,10 @@ export default function Truck({ truck, index }: any) {
                 {`Width - ${truck.widthUsed} / ${truck.trailer.width}(in)`} */}
             </div>
             {
-                truck.items.map((item: any, index: number) =>
-                    <div key={index}>{`${item.name} - ${item.length}in/${item.width}in/${numberWithCommas(item.weight)}lbs`}</div>
+                truck.items.map(({ item, position }: { item: any, position: any }, index: number) =>
+                    <div key={index}>
+                        {`${item.name} - ${item.length}in/${item.width}in/${item.weight}lbs`}
+                    </div>
                 )
             }
         </div>

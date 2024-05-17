@@ -1,66 +1,121 @@
-import { Trailer, flatbed48 } from '@dims/types/trailer'
+import { Trailer, flatbed48 } from '@dims/types/trailer';
+import { Item } from "./item"; // Assuming Item is defined in a separate module
+
+type PositionedItem = {
+    item: Item;
+    position: Position;
+};
+
+type Position = {
+    x: number;
+    y: number;
+};
 
 export default class Truck {
+    items: PositionedItem[];
+    trailer: Trailer;
+    currentCapacity: number;
+    grid: boolean[][]; // 2D array representing the trailer's available space
+    areaUsed: number;  // Track the area used on the truck
+
     constructor() {
-        this.trailer = flatbed48,
-        this.currentCapacity = 0,
-        this.areaUsed = 0
-        this.lengthUsed = 0
-        this.widthUsed = 0
-        this.items = []
+        this.trailer = flatbed48;
+        this.currentCapacity = 0;
+        this.areaUsed = 0;
+        this.grid = Array.from({ length: this.trailer.length }, () => Array(this.trailer.width).fill(false));
+        this.items = [];
     }
 
-    items: any[]
-    trailer: Trailer = flatbed48 // start with smallest
-    currentCapacity: number
-    areaUsed: number
-    lengthUsed: number
-    widthUsed: number
-
-    canFitItem(item: any) {
-        if (item.weight + this.currentCapacity > this.trailer.carryingCapacity)
-            return false
-        else if (item.length > this.trailer.length && item.width > this.trailer.length) {
-            return false
+    canFitItem(item: Item): boolean {
+        const itemArea = item.length * item.width;
+        if (this.currentCapacity + item.weight > this.trailer.carryingCapacity) {
+            return false;
         }
-        else if (item.length > this.trailer.width && item.width > this.trailer.width) {
-            return false
+        if (this.areaUsed + itemArea > this.trailer.area) {
+            return false;
         }
-        else if ((item.length * item.width) > this.trailer.area - this.areaUsed)
-            return false
-        else if (item.height > this.trailer.height)
-            return false
-        // check current dimentions
-       
-        // too long and cant be rotated
-        else if (item.length > (this.trailer.length - this.lengthUsed) && item.length > (this.trailer.width - this.widthUsed)) {
-            console.log('in first NEW one: ', item.name)
-            return false
-        }
-        // too wide and cant be rotated
-        else if (item.width > (this.trailer.width - this.widthUsed) && item.width > (this.trailer.length - this.lengthUsed)) {
-            console.log('in second one: ', item.name)
-            return false
-        }
-        else
-            return true
+        return this.findPositionForItem(item) !== null;
     }
 
-    upgradeTrailerType() {
-        // call check trailer types
-        // current capcity
+    findPositionForItem(item: Item): Position | null {
+        const orientations = [
+            { length: item.length, width: item.width },
+            { length: item.width, width: item.length }
+        ];
+
+        for (const { length, width } of orientations) {
+            for (let x = 0; x <= this.trailer.length - length; x++) {
+                for (let y = 0; y <= this.trailer.width - width; y++) {
+                    if (this.canPlaceItemAtPosition(x, y, length, width)) {
+                        return { x, y };
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
-    checkTrailerTypes(trailerTypes: any[]) {
-        // check current values against trailer types
-        // 
+    canPlaceItemAtPosition(x: number, y: number, length: number, width: number): boolean {
+        for (let i = x; i < x + length; i++) {
+            for (let j = y; j < y + width; j++) {
+                if (i >= this.trailer.length || j >= this.trailer.width || this.grid[i][j]) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
-    addItem(item: any) {
-        this.currentCapacity += item.weight
-        this.areaUsed += item.length * item.width
-        this.lengthUsed += item.length
-        this.widthUsed += item.width
-        this.items.push(item)
+    addItem(item: Item): void {
+        const position = this.findPositionForItem(item);
+        if (position) {
+            this.placeItem(item, position.x, position.y);
+        } else {
+            throw new Error('Item does not fit in any orientation');
+        }
+    }
+
+    placeItem(item: Item, x: number, y: number): void {
+        this.currentCapacity += item.weight;
+        this.areaUsed += item.length * item.width;
+
+        for (let i = x; i < x + item.length; i++) {
+            for (let j = y; j < y + item.width; j++) {
+                if (i >= this.trailer.length || j >= this.trailer.width) {
+                    throw new Error('Attempting to place item out of bounds');
+                }
+                this.grid[i][j] = true;
+            }
+        }
+
+        this.items.push({ item, position: { x, y } });
+    }
+
+    remainingSpaceAfterAdding(item: Item): number {
+        const position = this.findPositionForItem(item);
+        if (!position) return Infinity;
+
+        const usedArea = this.items.reduce((acc, curr) => acc + curr.item.length * curr.item.width, 0);
+        const remainingArea = this.trailer.area - (usedArea + item.length * item.width);
+
+        return remainingArea;
+    }
+
+    getItems(): PositionedItem[] {
+        return this.items;
+    }
+
+    getTrailer(): Trailer {
+        return this.trailer;
+    }
+
+    getCurrentCapacity(): number {
+        return this.currentCapacity;
+    }
+
+    getAreaUsed(): number {
+        return this.areaUsed;
     }
 }
