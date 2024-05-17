@@ -35,6 +35,9 @@ export default class Truck {
         if (this.areaUsed + itemArea > this.trailer.area) {
             return false;
         }
+        if (item.height > this.trailer.height)
+            return false
+        
         return this.findPositionForItem(item) !== null;
     }
 
