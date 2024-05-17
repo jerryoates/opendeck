@@ -43,10 +43,14 @@ export default class Truck {
             { length: item.width, width: item.length }
         ];
 
-        for (const { length, width } of orientations) {
+        for (const [index, { length, width }] of orientations.entries()) {
             for (let x = 0; x <= this.trailer.length - length; x++) {
                 for (let y = 0; y <= this.trailer.width - width; y++) {
                     if (this.canPlaceItemAtPosition(x, y, length, width)) {
+                        if (index === 0)
+                            console.log('not rotating')
+                        if (index === 1)
+                            console.log('rotating item: ', item.name)
                         return { x, y };
                     }
                 }

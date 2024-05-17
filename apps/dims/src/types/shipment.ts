@@ -25,9 +25,13 @@ export default class Shipment {
 
             for (const truck of this.trucks) {
                 if (truck.canFitItem(item)) {
-                    truck.addItem(item)
-                    placed = true
-                    break
+                    try {
+                        truck.addItem(item)
+                        placed = true
+                        break
+                    } catch {
+                        console.warn('Error placing item: ', item)
+                    }
                 }
             }
 

@@ -26,7 +26,6 @@ export async function POST(
   res: NextResponse
 ) {
     const data = await req.json()
-
     const shipment = new Shipment()
 
     const enumerated: Item[] = []
@@ -35,19 +34,6 @@ export async function POST(
             enumerated.push(item)
         }
     })
-
-    // enumerated.sort((a: any, b: any) => {
-    //     const areaA = a.length * a.width
-    //     const areaB = b.length * b.width
-    //     if (areaA < areaB) {
-    //         return 1;
-    //     }
-    //     if (areaA > areaB) {
-    //         return -1;
-    //     }
-
-    //     return 0;
-    // });
 
     shipment.packItems(enumerated)
 
@@ -59,8 +45,6 @@ export async function POST(
     //     shipment.addTruck(truck)
 
     shipment.checkEmptyTrucks()
-
-    console.log(shipment.trucks[0].items)
 
     return NextResponse.json( shipment, { status: 200 });
 }
