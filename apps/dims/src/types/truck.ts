@@ -4,6 +4,7 @@ import { Item } from "./item"; // Assuming Item is defined in a separate module
 type PositionedItem = {
     item: Item;
     position: Position;
+    // rotated: boolean
 };
 
 type Position = {
@@ -43,12 +44,11 @@ export default class Truck {
             { length: item.width, width: item.length }
         ];
 
+        // item.rotated = false
         for (const [index, { length, width }] of orientations.entries()) {
             for (let x = 0; x <= this.trailer.length - length; x++) {
                 for (let y = 0; y <= this.trailer.width - width; y++) {
                     if (this.canPlaceItemAtPosition(x, y, length, width)) {
-                        if (index === 0)
-                            console.log('not rotating')
                         if (index === 1)
                             console.log('rotating item: ', item.name)
                         return { x, y };
