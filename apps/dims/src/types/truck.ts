@@ -19,8 +19,8 @@ export default class Truck {
     grid: boolean[][]; // 2D array representing the trailer's available space
     areaUsed: number;  // Track the area used on the truck
 
-    constructor() {
-        this.trailer = flatbed48;
+    constructor(trailer: Trailer = flatbed48) {
+        this.trailer = trailer;
         this.currentCapacity = 0;
         this.areaUsed = 0;
         this.grid = Array.from({ length: this.trailer.length }, () => Array(this.trailer.width).fill(false));
